@@ -1,4 +1,4 @@
-package com.revature.model;
+package com.revature.models;
 
 import java.util.Set;
 
@@ -37,24 +37,25 @@ public class Attribute {
 	private int id;
 	
 	
-	private String strength;
-	private String dexterity;
-	private String constitution;
-	private String intelligence;
-	private String wisdom;
-	private String charisma;
+	private int str;
+	private int dex;
+	private int con;
+	private int intel;
+	private int wis;
+	private int cha;
 	
 	@ManyToMany(mappedBy="attributes")
 	private @NonNull Set<User> owner;
-	
-	public Attribute(String strength, String dexterity, String constitution, String intelligence, String wisdom,
-			String charisma) {
+
+	public Attribute(int str, int dex, int con, int intel, int wis, int cha) {
 		super();
-		this.strength = strength;
-		this.dexterity = dexterity;
-		this.constitution = constitution;
-		this.intelligence = intelligence;
-		this.wisdom = wisdom;
-		this.charisma = charisma;
-	}	
+		this.str = str;
+		this.dex = dex;
+		this.con = con;
+		this.intel = intel;
+		this.wis = wis;
+		this.cha = cha;
+	}
+	
+	
 }
