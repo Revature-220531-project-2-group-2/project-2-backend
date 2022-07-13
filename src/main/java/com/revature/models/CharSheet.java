@@ -54,6 +54,7 @@ public class CharSheet{
 	
 	private int intel;
 	
+
 	@ElementCollection
 	@CollectionTable(name="spells", joinColumns=@JoinColumn(name = "char_id" ))
 	private Set<String> spells;
@@ -63,18 +64,6 @@ public class CharSheet{
 	@ElementCollection
 	@CollectionTable(name="equipment", joinColumns=@JoinColumn(name = "char_id" ))
 	private List<String> equipment;
-
-
-
-	public int getId() {
-		return id;
-	}
-
-
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 
 	
