@@ -57,6 +57,7 @@ public class CharSheet{
 	
 	private int intel;
 	
+
 	@ElementCollection
 	@CollectionTable(name="spells", joinColumns=@JoinColumn(name = "char_id" ))
 	private Set<String> spells;
