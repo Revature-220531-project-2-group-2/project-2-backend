@@ -22,17 +22,24 @@ import lombok.NoArgsConstructor;
 public class CharSheet{
 	
 
+
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="char_id")
 	private int id;
 	
+	
+	
 	@ManyToOne
-	@JoinColumn(name="id")
+	@JoinColumn(name="owner_id")
 	private User user;
+	
+	@Column(name="char_name")
+	private String charName;
 	
 	private String race;
 	
+	@Column(name = "class")
 	private String charClass;
 	
 
@@ -60,11 +67,11 @@ public class CharSheet{
 	private Set<String> spells;
 	
 
-
 	@ElementCollection
 	@CollectionTable(name="equipment", joinColumns=@JoinColumn(name = "char_id" ))
 	private List<String> equipment;
 
 
+	
 	
 }
