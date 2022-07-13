@@ -21,6 +21,10 @@ public class CharSheetService {
 		return charRepo.findById(id);
 	}
 	
+	public CharSheet findByCharName(String name) {
+		return charRepo.findCharSheetByCharName(name);
+	}
+	
 	public void deleteCharSheetById(int id) {
 		charRepo.deleteById(id);
 	}

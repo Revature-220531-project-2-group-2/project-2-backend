@@ -28,10 +28,14 @@ public class CharSheet{
 	@Column(name="char_id")
 	private int id;
 	
+	
+	
 	@ManyToOne
-	@JoinColumn(name="id")
+	@JoinColumn(name="owner_id")
 	private User user;
 	
+	@Column(name="char_name")
+	private String charName;
 	
 	private String race;
 	
