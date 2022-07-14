@@ -16,8 +16,6 @@ import com.revature.models.User;
 import com.revature.services.UserService;
 
 /**
- * This class will provide login functionality
- * @author Kenneth Burke
  *
  */
 @RestController
@@ -41,4 +39,6 @@ public class AuthController {
 			return ResponseEntity.ok(user.get());
 		}
 	}
+	
+	
 }

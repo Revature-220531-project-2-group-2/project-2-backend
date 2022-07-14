@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,20 +26,24 @@ import com.revature.services.UserService;
  * Responsible for all info related to the users
  *  
  *  
-	 * User can:  login *
+	 * User can:    
 	 *            register *
-	 *            update themselves *
-	 *            create a new character * 
+	 *            be updated *
+	 *            be deleted *
+	 *            get a list of all users
+	 *            create a new character *             "/{username}/add-character"
 	 *            
-	 *            update their character *
-	 * 			  delete a character *
-	 * 			  
-	 *            retrieve their characters *
-	 *            retrieve a specific character by id or character name *
-	 *            retrieve a list of their campaigns *
-	 *            add themselves to a campaign*
-	 *            can view all campaigns *
-	 *            retrieve a list of all users *
+	 *            update/save a specific character *   "/{username}/update-character"
+	 * 			  delete a specific character *        "/{username}/remove-character"
+	 *            retrieve their characters *          "/{username}/characters"
+	 *            retrieve a specific character by id  "/{username}/characters/{id}"
+	 *            or character name *                  "/{username}/characters/{char-name}"
+	 *            u
+	 *            
+	 *            retrieve a list of their campaigns *    "/{username}/campaigns
+	 *            add themselves to a specific campaign*  "/{username}/campaigns/join-campaign-{id}
+	 *            can view all campaigns *                 "/{username}/view-all-campaigns"
+	 
 
     
  * @author Kenneth Burke
@@ -125,6 +130,14 @@ public class UserController {
 			return ResponseEntity.ok(user.get());
 		}
 	}
+	/**
+	 * Deletes a user by their id
+	 * @param id
+	 */
+	@DeleteMapping(value = "/{id}")
+	public void removeUser(@PathVariable("id") int id) {
+		userService.deleteUser(id);
+	}
 	
 //=================================User Campaign Mappings =====================================================
 	
@@ -191,7 +204,7 @@ public class UserController {
 	 */
 	@PostMapping(value="/{username}/remove-character")
 	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet delCharSheet) {
-		charService.deleteCharSheetById(delCharSheet.getId());	
+		charService.deleteCharSheetById(delCharSheet.getCharId());	
 	}
 	
 	/**
@@ -214,7 +227,32 @@ public class UserController {
 		return charService.getCharactersByUsername(username);
 	}
 	
+	/**
+	 * Get a character by id
+	 * @param id
+	 * @return
+	 */
+	@GetMapping(value="/{username}/characters/{id}")
+	public ResponseEntity<CharSheet> findCharacterById(@PathVariable("id") int id) {
+		Optional<CharSheet> character = charService.findById(id);
+		if(!character.isPresent()) {
+			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
+		} else {
+			return ResponseEntity.ok(character.get());
+		}
+	}
 	
+	@GetMapping(value = "/{username}/characters/{char-name}")
+	public ResponseEntity<CharSheet> findCharacterByName(@PathVariable("char-name") String charName){
+		Optional<CharSheet> character = charService.findByCharName(charName);
+		if(!character.isPresent()) {
+			
+			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
+		}else {
+			return ResponseEntity.ok(character.get()); 
+		}
+		
+	}
 	
 	
 
