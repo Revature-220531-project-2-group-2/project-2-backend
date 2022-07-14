@@ -1,24 +1,22 @@
 package com.revature.models;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//@Entity
-//@Table(name="attributes")
+///*@Entity
+//@Table(name="attributes")*/
 @Data
 @NoArgsConstructor @AllArgsConstructor
+@Embeddable
 public class Attribute {
 
-	@Id
-	@Column(name="attributes_id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+//	@Id
+//	@Column(name="attributes_id")
+//	@GeneratedValue(strategy=GenerationType.IDENTITY)
+//	private int id;
 	
 	
 	private int str;

@@ -1,5 +1,7 @@
 package com.revature.controllers;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +33,12 @@ public class AuthController {
 	
 	@PostMapping()
 	public ResponseEntity<User> login(@Valid Credentials creds){
-		User user = userService.processLogin(creds.getUsername(),creds.getPassword());
+		Optional<User> user = userService.processLogin(creds.getUsername(),creds.getPassword());
 		//returns a status with nothing else
-		if(user == null) {
+		if(!user.isPresent()) {
 			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
 		}else {
-			return ResponseEntity.ok(user);
+			return ResponseEntity.ok(user.get());
 		}
 	}
 }

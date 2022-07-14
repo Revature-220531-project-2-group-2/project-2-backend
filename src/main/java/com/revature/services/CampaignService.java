@@ -19,21 +19,25 @@ public class CampaignService {
 
 	private CampaignRepository campRepo;
 	
+	public CampaignService(CampaignRepository campRepo) {
+		this.campRepo = campRepo;
+	}
+	
 	public List<Campaign> getAllCampaigns(){
 		return campRepo.findAll();
 	}
 	
-	public List<Campaign> getCampaignsByUser(User u){
-		return campRepo.findAll().stream().filter(c -> c.getUsers().contains(u))
-				.collect(Collectors.toList());
+	public Set<Campaign> getCampaignsByUsername(User u){
+		return campRepo.findAll().stream().filter(c -> c.getUsers().contains(u))			
+				.collect(Collectors.toSet());
+				
 	}
-	
+
 	public Optional<Campaign> getCampaignById(int id) {
 		return campRepo.findById(id);
 	}
 	public void removeUserFromCampaign(User u, Campaign c) {
-		c.removeUser(u);
-		campRepo.save(c);
+		
 		
 	}
 	
@@ -46,16 +50,16 @@ public class CampaignService {
 		campRepo.deleteById(id);
 	}
 
-	public void addCampaign(Campaign cp) {
-		campRepo.save(cp);
+	public Campaign addCampaign(Campaign cp) {
+		return campRepo.save(cp);
 	}
 	
 	public Campaign updateCampaign(Campaign cp) {
 		return campRepo.save(cp);
 	}
 	
-	public Set<Campaign> getCharactersByUsername(String username){
-		return campRepo.findCampaignByUserUsername(username);
+	public List<Campaign> getCampaignsByUsername(String username){
+		return campRepo.findAll();
 
 	}
 }
