@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.revature.data.CharSheetRepository;
+import com.revature.models.Attribute;
 import com.revature.models.CharSheet;
 
 @Service
@@ -21,10 +22,15 @@ public class CharSheetService {
 		return charRepo.findById(id);
 	}
 	
-	public CharSheet findByCharName(String name) {
-		return charRepo.findCharSheetByCharName(name);
-	}
+	/*
+	 * public Optional<CharSheet> findByCharName(String name) { return
+	 * charRepo.findCharSheetByCharName(name); }
+	 */
 	
+	public Optional<CharSheet> findByCharName(String charName) {
+		// TODO Auto-generated method stub
+		return charRepo.findCharSheetByCharName(charName);
+	}
 	public void deleteCharSheetById(int id) {
 		charRepo.deleteById(id);
 	}
@@ -44,6 +50,9 @@ public class CharSheetService {
 	public CharSheet save(CharSheet cs) {
 		return charRepo.save(cs);
 	}
+
+
+	
 	
 	
 	

@@ -3,16 +3,17 @@ package com.revature.models;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,12 +28,12 @@ public class CharSheet{
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="char_id")
-	private int id;
+	private int charId;
 	
 	
 	
-	@ManyToOne
-	@JoinColumn(name="owner_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="userclear")
 	private User user;
 	
 	@Column(name="char_name")
@@ -43,30 +44,11 @@ public class CharSheet{
 	@Column(name = "class")
 	private String charClass;
 	
-	@Column(name = "attirbutes")
 	
-	@Embedded
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name ="attribute_id")
 	private Attribute attributes;
 	
-	/*
-	 * private int exp;
-	 * 
-	 * private int max_hp;
-	 * 
-	 * private int current_hp;
-	 * 
-	 * private int str;
-	 * 
-	 * private int dex;
-	 * 
-	 * private int con;
-	 * 
-	 * private int wis;
-	 * 
-	 * private int cha;
-	 * 
-	 * private int intel;
-	 */
 	
 
 	@ElementCollection

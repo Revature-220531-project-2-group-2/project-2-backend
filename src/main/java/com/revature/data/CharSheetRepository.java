@@ -1,5 +1,6 @@
 package com.revature.data;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,7 @@ public interface CharSheetRepository extends JpaRepository<CharSheet, Integer>{
 	
 	public Set<CharSheet> findCharSheetsByUserUsername(String username);
 	
-	public CharSheet findCharSheetByCharName(String charName);
+	public Optional<CharSheet> findCharSheetByCharName(String charName);
 	
 	
 	
