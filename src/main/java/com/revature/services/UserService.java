@@ -35,7 +35,7 @@ public class UserService {
 	
 	
 
-	public User processLogin(String username, String password) {		
+	public Optional<User> processLogin(String username, String password) {		
 		return userRepo.findUserByUsernameAndPwd(username, password);
 	}
 	
@@ -44,7 +44,7 @@ public class UserService {
 		return userRepo.findById(id);
 	}
 	
-	public User getByUsername(String username){
+	public Optional<User> getByUsername(String username){
 		return userRepo.findUserByUsername(username);
 		
 	}

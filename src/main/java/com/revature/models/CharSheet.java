@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,24 +43,30 @@ public class CharSheet{
 	@Column(name = "class")
 	private String charClass;
 	
-
-	private int exp;
+	@Column(name = "attirbutes")
 	
-	private int max_hp;
+	@Embedded
+	private Attribute attributes;
 	
-	private int current_hp;
-	
-	private int str;
-	
-	private int dex;
-	
-	private int con;
-	
-	private int wis;
-	
-	private int cha;
-	
-	private int intel;
+	/*
+	 * private int exp;
+	 * 
+	 * private int max_hp;
+	 * 
+	 * private int current_hp;
+	 * 
+	 * private int str;
+	 * 
+	 * private int dex;
+	 * 
+	 * private int con;
+	 * 
+	 * private int wis;
+	 * 
+	 * private int cha;
+	 * 
+	 * private int intel;
+	 */
 	
 
 	@ElementCollection
