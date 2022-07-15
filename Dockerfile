@@ -8,4 +8,4 @@ COPY /target/dungens-and-dragons-app-SNAPSHOT.jar dungens-and-dragons-app-SNAPSH
 EXPOSE 5000
 
 #Run the JAR when you run the container, thus executing the app
-ENTRYPOINT ["java","-jar", "dungens-and-dragons-app-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar", "dungens-and-dragons-app-SNAPSHOT.jar"]
