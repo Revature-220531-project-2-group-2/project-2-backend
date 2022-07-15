@@ -33,7 +33,6 @@ public class CharSheet{
 	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="user_char", nullable=false)
 	private User user;
 	
 	@Column(name="char_name")
