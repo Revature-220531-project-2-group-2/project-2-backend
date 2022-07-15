@@ -34,12 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class User {
 
-	@Transient
-	protected UserService userv;
-	@Transient
-	protected CharSheetService cserv;
-	@Transient
-	protected CampaignService campServ;
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

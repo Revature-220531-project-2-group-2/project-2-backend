@@ -98,6 +98,7 @@ public class CampaignController {
 		if(!campaign.isPresent() || !user.isPresent()) {
 			return new ResponseEntity<Campaign>(HttpStatus.BAD_REQUEST);
 		}else {
+			campServ.addUserToCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());
 		}
 	}

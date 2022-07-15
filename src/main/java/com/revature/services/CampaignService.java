@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.revature.data.CampaignRepository;
+import com.revature.data.UserRepository;
 import com.revature.models.Campaign;
 import com.revature.models.User;
 
@@ -18,9 +19,11 @@ public class CampaignService {
 
 
 	private CampaignRepository campRepo;
+	private UserRepository userRepo;
 	
-	public CampaignService(CampaignRepository campRepo) {
+	public CampaignService(CampaignRepository campRepo, UserRepository userRepo) {
 		this.campRepo = campRepo;
+		this.userRepo = userRepo;
 	}
 	
 	public List<Campaign> getAllCampaigns(){
@@ -36,9 +39,20 @@ public class CampaignService {
 	public Optional<Campaign> getCampaignById(int id) {
 		return campRepo.findById(id);
 	}
+	public void addUserToCampaign(User u, Campaign c) {
+		u.getCampaigns().add(c);
+		userRepo.save(u);
+		c.addUser(u);
+		campRepo.save(c);
+	
+	}
 	public void removeUserFromCampaign(User u, Campaign c) {
-		
-		
+	
+		u.getCampaigns().remove(c);
+		userRepo.save(u);
+		c.removeUser(u);
+		campRepo.save(c);
+			
 	}
 	
 	
