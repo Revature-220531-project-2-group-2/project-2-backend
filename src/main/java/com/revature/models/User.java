@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -60,7 +61,7 @@ public class User {
 	//@ElementCollection
 	//@CollectionTable(name = "user_characters", joinColumns = @JoinColumn(name = "owner_id"))
 	@OneToMany(cascade=CascadeType.ALL, mappedBy ="user")
-	@Column(name = "char_sheets")
+	@Column(name = "char_sheet")
 	private Set<CharSheet> characters;
 
 	@ManyToMany
