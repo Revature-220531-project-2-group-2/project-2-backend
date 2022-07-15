@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.revature.data.CharSheetRepository;
+import com.revature.models.Attribute;
 import com.revature.models.CharSheet;
 
 @Service

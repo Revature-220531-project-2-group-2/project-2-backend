@@ -1,5 +1,7 @@
 package com.revature.data;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +16,9 @@ import com.revature.models.User;
 @Repository  //Stereotype annotation (specification of @Component
 public interface UserRepository extends JpaRepository<User, Integer>{
 
-	User findUserByUsernameAndPwd(String username, String password);
+	Optional<User> findUserByUsernameAndPwd(String username, String password);
 	
-	User findUserByUsername(String username);
+	Optional<User> findUserByUsername(String username);
 	
 
 }

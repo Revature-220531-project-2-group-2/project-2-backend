@@ -1,12 +1,10 @@
 package com.revature.models;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,8 +57,9 @@ public class User {
 	@NonNull
 	private String email;
 
-	@ElementCollection
-	@CollectionTable(name = "user_characters", joinColumns = @JoinColumn(name = "owner_id"))
+	//@ElementCollection
+	//@CollectionTable(name = "user_characters", joinColumns = @JoinColumn(name = "owner_id"))
+	@OneToMany(cascade=CascadeType.ALL, mappedBy ="user")
 	@Column(name = "char_sheets")
 	private Set<CharSheet> characters;
 
@@ -71,3 +70,4 @@ public class User {
 
 
 }
+

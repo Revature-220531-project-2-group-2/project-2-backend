@@ -1,40 +1,35 @@
 package com.revature.services;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
-
-import com.revature.data.AttributeRepository;
 import com.revature.data.AttributesRepository;
+import com.revature.data.CharSheetRepository;
 import com.revature.models.Attribute;
+import com.revature.models.CharSheet;
 
 @Service
 public class AttributeService {
+	
+	public Optional<Attribute> getAttributesById(int attribId) {
+		return attribRepo.findById(attribId);
+	}
+	
+	public Attribute getAttributesByCharacterId(int charId){
+		Optional<CharSheet> character = charRepo.findById(charId);
+		if(!character.isPresent()) {
+			return null;
+		}else {
+			return character.get().getAttributes();
+		}
+	}
 
-	private AttributesRepository attRepo;
+	public Attribute getAttributesByCharacterName(String charName) {
+		Optional<CharSheet> character = charRepo.findCharSheetByCharName(charName);
+		if(!character.isPresent()) {
+			return null;
+		}else {
+			return character.get().getAttributes();
+		}
 	
-	public AttributeService(AttributesRepository attRepo) {
-		this.attRepo = attRepo;
-	}
-	
-	public Optional<Attribute> findById(int id) {
-		return attRepo.findById(id);
-	}
-	
-	public void deleteAttributeById(int id) {
-		attRepo.deleteById(id);
-	}
-
-	public void addAttribute(Attribute at) {
-		attRepo.save(at);
-	}
-	
-	public Attribute updateAttribute(Attribute at) {
-		return attRepo.save(at);
-	}
-	
-	public Set<Attribute> getCharactersByUsername(String username){
-		return attRepo.findAttributeByUserCharSheet(username);
-	}
 }
