@@ -21,22 +21,36 @@ public class CharSheetService {
 		return charRepo.findById(id);
 	}
 	
+	/*
+	 * public Optional<CharSheet> findByCharName(String name) { return
+	 * charRepo.findCharSheetByCharName(name); }
+	 */
+	
+	public Optional<CharSheet> findByCharName(String charName) {
+		// TODO Auto-generated method stub
+		return charRepo.findCharSheetByCharName(charName);
+	}
 	public void deleteCharSheetById(int id) {
 		charRepo.deleteById(id);
 	}
 
-	public void addCharSheet(CharSheet cs) {
-		charRepo.save(cs);
+	public CharSheet addCharSheet(CharSheet cs) {
+		return charRepo.save(cs);
 	}
 	
-	public void updateCharSheet(CharSheet cs) {
-		charRepo.save(cs);
+	public CharSheet updateCharSheet(CharSheet cs) {
+		return charRepo.save(cs);
 	}
 	
 	public Set<CharSheet> getCharactersByUsername(String username){
 		return charRepo.findCharSheetsByUserUsername(username);
 	}
 	
+	public CharSheet save(CharSheet cs) {
+		return charRepo.save(cs);
+	}
+
+
 	
 	
 	

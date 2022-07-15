@@ -26,8 +26,8 @@ public class CampaignService {
 		campRepo.deleteById(id);
 	}
 
-	public void addCampaign(Campaign cp) {
-		campRepo.save(cp);
+	public Campaign addCampaign(Campaign cp) {
+		return campRepo.save(cp);
 	}
 	
 	public void updateCampaign(Campaign cp) {

@@ -6,14 +6,15 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.revature.data.AttributeRepository;
+import com.revature.data.AttributesRepository;
 import com.revature.models.Attribute;
 
 @Service
 public class AttributeService {
 
-	private AttributeRepository attRepo;
+	private AttributesRepository attRepo;
 	
-	public AttributeService(AttributeRepository attRepo) {
+	public AttributeService(AttributesRepository attRepo) {
 		this.attRepo = attRepo;
 	}
 	
@@ -29,8 +30,8 @@ public class AttributeService {
 		attRepo.save(at);
 	}
 	
-	public void updateAttribute(Attribute at) {
-		attRepo.save(at);
+	public Attribute updateAttribute(Attribute at) {
+		return attRepo.save(at);
 	}
 	
 	public Set<Attribute> getCharactersByUsername(String username){
