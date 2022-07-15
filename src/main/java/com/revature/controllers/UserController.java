@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Campaign;
@@ -104,8 +105,8 @@ public class UserController {
 	 * @param username The username of the user being searched for;
 	 * @return
 	 */
-	@GetMapping(value = "/{username}")
-	public ResponseEntity<User> findUserByUserName(@PathVariable("username") String username){
+	@GetMapping(value="/all")
+	public ResponseEntity<User> findUserByUserName(@RequestBody String username){
 		Optional<User> user = userService.getByUsername(username);
 		if(!user.isPresent()) {
 			
@@ -222,7 +223,7 @@ public class UserController {
 	 * @param username
 	 * @return
 	 */
-	@GetMapping(value="/{username}/characters")
+	@GetMapping(value="/{username}/characters/")
 	public Set<CharSheet> getUserCharacters(@PathVariable("username") String username){
 		return charService.getCharactersByUsername(username);
 	}
@@ -232,7 +233,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping(value="/{username}/characters/{id}")
+	@GetMapping(value="/{username}/characters/get-{id}")
 	public ResponseEntity<CharSheet> findCharacterById(@PathVariable("id") int id) {
 		Optional<CharSheet> character = charService.findById(id);
 		if(!character.isPresent()) {
@@ -242,8 +243,8 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping(value = "/{username}/characters/{char-name}")
-	public ResponseEntity<CharSheet> findCharacterByName(@PathVariable("char-name") String charName){
+	@GetMapping(value = "/{username}/characters/all")
+	public ResponseEntity<CharSheet> findCharacterByName(@RequestBody String charName){
 		Optional<CharSheet> character = charService.findByCharName(charName);
 		if(!character.isPresent()) {
 			

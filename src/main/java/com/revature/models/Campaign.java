@@ -9,28 +9,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import com.revature.services.CampaignService;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name="campaigns")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-//@EqualsAndHashCode(exclude={"owner"}) @ToString(exclude= {"owner"})
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="campaignId")
+@EqualsAndHashCode(exclude={"users"}) @ToString(exclude= {"users"})
 public class Campaign {
 
 	
-	
-	@Transient
-	CampaignService campServ;
-	
+		
 	@Id
 	@Column(name="campaigns_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -39,16 +38,18 @@ public class Campaign {
 	@ManyToMany(mappedBy="campaigns")
 	private  Set<User> users;
 
-	
-	public void addUser(User u) {
-		users.add(u);
-		campServ.updateCampaign(this);
-	  
-	}
-	
 	public void removeUser(User u) {
 		users.remove(u);
-		campServ.updateCampaign(this);
+		u.getCampaigns().remove(this);
 	}
+
+	public void addUser(User u) {
+		// TODO Auto-generated method stub
+		users.add(u);
+		u.getCampaigns().add(this);
+	}
+
+	
+
 	
 }
