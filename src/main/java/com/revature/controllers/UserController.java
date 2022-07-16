@@ -211,10 +211,14 @@ public class UserController {
 	 * Delete a character for the user
 	 * @param delCharSheet
 	 */
+//TODO change this to entity
 	@PostMapping(value="/{username}/remove-character")
-	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet delCharSheet) {
-		charService.deleteCharSheetById(delCharSheet.getCharId());	
+	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet character) {
+		userService.getByUsername(username).get().getCharacters().remove(character);
 	}
+//	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet delCharSheet) {
+//		charService.deleteCharSheetById(delCharSheet.getCharId());	
+//	}
 	
 	/**
 	 * Update or Save the users character
