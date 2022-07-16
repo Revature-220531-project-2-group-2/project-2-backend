@@ -196,11 +196,12 @@ public class UserController {
 	 */
 	@PostMapping(value="/{username}/add-character")
 	public ResponseEntity<User> addNewCharacter(@PathVariable("username") String username, @RequestBody CharSheet newCharSheet) {
+		System.out.println("\n\nusername  " + username + "\n\n");
 		Optional<User> user = userService.getByUsername(username);
 		if(!user.isPresent()) {
 			return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
 		}else {
-		   
+			newCharSheet.setCharName(newCharSheet.getCharName().replace(" ", "-"));
 		    userService.addCharSheet(user.get(), newCharSheet);
 		    return ResponseEntity.ok(user.get());
 		}
@@ -212,9 +213,13 @@ public class UserController {
 	 * @param delCharSheet
 	 */
 //TODO change this to entity
-	@PostMapping(value="/{username}/remove-character")
-	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet character) {
-		userService.getByUsername(username).get().getCharacters().remove(character);
+	@DeleteMapping(value="/{username}/remove-character-{id}")
+	public void removeCharSheet(@PathVariable("username") String username, @PathVariable("id") int characterId) {
+		Optional<CharSheet> characterOptional = charService.findById(characterId);
+		CharSheet character = characterOptional.get();
+		User u = userService.getByUsername(username).get();
+		userService.deleteCharSheet(u, character);
+//		charService.deleteCharSheetById(characterId);
 	}
 //	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet delCharSheet) {
 //		charService.deleteCharSheetById(delCharSheet.getCharId());	
@@ -225,9 +230,14 @@ public class UserController {
 	 * @param username
 	 * @param updatedCharSheet
 	 */
-	@PutMapping(value="/{username}/update-character")
-	public void updateCharSheet(@PathVariable("username") String username, @RequestBody CharSheet updatedCharSheet) {
-		charService.updateCharSheet(updatedCharSheet);
+	@PutMapping(value="/{username}/update-character-{id}")
+	public void updateCharSheet(@PathVariable("username") String username, 
+			@PathVariable("id") int charId, @RequestBody CharSheet updatedCharSheet) {
+		// some sort of logic to see that charId belongs to this user
+		System.out.println(updatedCharSheet);
+		User u = userService.getByUsername(username).get();
+		userService.updateCharSheet(u, updatedCharSheet);
+//		charService.updateCharSheet(updatedCharSheet);
 	}
 	
 	/**
@@ -235,7 +245,7 @@ public class UserController {
 	 * @param username
 	 * @return
 	 */
-	@GetMapping(value="/{username}/characters/")
+	@GetMapping(value="/{username}/characters")
 	public Set<CharSheet> getUserCharacters(@PathVariable("username") String username){
 		return charService.getCharactersByUsername(username);
 	}
@@ -255,8 +265,14 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping(value = "/{username}/characters/all")
-	public ResponseEntity<CharSheet> findCharacterByName(@RequestBody String charName){
+	/**
+	 * Get a character by Username and Char name
+	 * @param id
+	 * @return
+	 */
+	@GetMapping(value = "/{username}/characters/name-{name}")
+	public ResponseEntity<CharSheet> findCharacterByName(@PathVariable("username") String username,
+			@PathVariable("name") String charName){
 		Optional<CharSheet> character = charService.findByCharName(charName);
 		if(!character.isPresent()) {
 			

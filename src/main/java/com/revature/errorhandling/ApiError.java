@@ -51,8 +51,8 @@ public class ApiError {
 		this.subErrors.add(err);
 	}
 
-	public HttpStatus getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	public HttpStatus getStatus() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 }

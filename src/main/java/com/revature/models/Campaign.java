@@ -25,7 +25,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="campaignId")
-@EqualsAndHashCode(exclude={"users"}) @ToString(exclude= {"users"})
+@EqualsAndHashCode(exclude={"users"})
+@ToString(exclude= {"users"})
 public class Campaign {
 
 	
@@ -34,6 +35,9 @@ public class Campaign {
 	@Column(name="campaigns_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int campaignId;
+	
+	@Column(name="campaigns_name")
+	private String campaignName;
 		
 	@ManyToMany(mappedBy="campaigns")
 	private  Set<User> users;

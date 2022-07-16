@@ -1,5 +1,6 @@
 package com.revature.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -14,17 +15,19 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import com.revature.services.CampaignService;
-import com.revature.services.CharSheetService;
-import com.revature.services.UserService;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "users")
@@ -32,6 +35,10 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@EqualsAndHashCode(exclude={"char_sheet", "user_campaigns"}) 
+@ToString(exclude= {"char_sheet", "user_campaigns", "campaigns"})
+@JsonIgnoreProperties(value = { "characters", "campaigns" })
 public class User {
 
 	
@@ -55,15 +62,47 @@ public class User {
 
 	//@ElementCollection
 	//@CollectionTable(name = "user_characters", joinColumns = @JoinColumn(name = "owner_id"))
+	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL, mappedBy ="user")
 	@Column(name = "char_sheet")
 	private Set<CharSheet> characters;
 
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "user_campaigns", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "campaign_id"))
 	private List<Campaign> campaigns;
 
+	public void removeCampaign(Campaign c) {
+		this.campaigns.remove(c);
+	}
+	
+	public void addCampaign(Campaign c) {
+		this.campaigns.add(c);
+	}
+	
+	public void updateCampaign(Campaign c) {
+		this.campaigns.removeIf(e -> e.getCampaignId() == c.getCampaignId());
+		this.campaigns.add(c);
+	}
 
+	public void removeCharacter(CharSheet c) {
+		this.characters.remove(c);
+	}
+	
+	public void addCharacter(CharSheet c) {
+		this.characters.add(c);
+	}
+	
+	public void updateCharacter(CharSheet c) {
+		this.characters.removeIf(e -> e.getCharId() == c.getCharId());
+		this.characters.add(c);
+	}
+	
+	public void deleteCharacter(CharSheet c) {
+		
+		this.characters.removeIf(e -> e.getCharId() == c.getCharId());
+
+	}
 
 }
 

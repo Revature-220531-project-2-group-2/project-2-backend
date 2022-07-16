@@ -2,11 +2,13 @@ package com.revature.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.revature.data.CharSheetRepository;
 import com.revature.data.UserRepository;
 import com.revature.models.CharSheet;
 import com.revature.models.User;
@@ -16,13 +18,15 @@ public class UserService {
 
 	
 	private UserRepository userRepo;
+	private CharSheetRepository charRepo;
 	
 	//Spring Data will generate an implementation class UserRepositoryImpl Bean automatically and inject
 	//it into an instance of UserService everytime UserService is called
 	
 	//@Autowired
-	public UserService(UserRepository userRepo) {
+	public UserService(UserRepository userRepo, CharSheetRepository charRepo) {
 		this.userRepo = userRepo;
+		this.charRepo = charRepo;
 	}
 	
 	
@@ -52,6 +56,7 @@ public class UserService {
 
 	//Get all Users from the db
 	public List<User> getAllUsers(){
+		System.out.println(userRepo.findAll().get(0));
 		return userRepo.findAll();
 	}
 	
@@ -66,11 +71,35 @@ public class UserService {
 
 
 	public CharSheet addCharSheet(User u, CharSheet newCharSheet) {
-		u.getCharacters().add(newCharSheet);
-		userRepo.save(u);
+		System.out.println(newCharSheet);
+		newCharSheet.setUser(u);
+
+//		Set<CharSheet> mySheets = charRepo.findAllCharSheetsByUserId(u.getId());
+//		mySheets.add(newCharSheet);
+		charRepo.save(newCharSheet);
+//		userRepo.save(u);
 		return newCharSheet;
 	}
 	
+	public CharSheet updateCharSheet(User u, CharSheet aCharSheet) {
+
+		u.updateCharacter(aCharSheet);
+		aCharSheet.addUser(u);
+		userRepo.save(u);
+//		userRepo.save(u);
+		return aCharSheet;
+	}
+	
+	public CharSheet deleteCharSheet(User u, CharSheet aCharSheet) {
+		u.deleteCharacter(aCharSheet);
+		aCharSheet.removeUser(u);
+		userRepo.save(u);
+		charRepo.deleteById(aCharSheet.getCharId());
+//		userRepo.save(u);
+		return aCharSheet;
+	}
+	
+
 	
 
 

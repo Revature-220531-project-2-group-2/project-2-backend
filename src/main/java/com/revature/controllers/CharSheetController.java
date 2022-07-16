@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.data.CharSheetRepository;
-import com.revature.models.Attribute;
 import com.revature.models.Campaign;
 import com.revature.models.CharSheet;
 import com.revature.services.CharSheetService;
@@ -78,20 +77,7 @@ public class CharSheetController {
 		}
 	}
 	
-	/**
-	 * Get attributes by character id
-	 * @param id
-	 * @return
-	 */
-	@GetMapping(value="/{id}/attributes")
-	public ResponseEntity<Attribute> getAttributes(@PathVariable("id") int id){
-		Optional<CharSheet> charSheet = charRepo.findById(id);
-		if(!charSheet.isPresent()) {
-			return new ResponseEntity<Attribute>(HttpStatus.NO_CONTENT);
-		} else {
-			return ResponseEntity.ok(charSheet.get().getAttributes());
-		}
-	}
+	
 	
 	/**
 	 * Create and save a new Campaign
@@ -99,7 +85,7 @@ public class CharSheetController {
 	 * @return
 	 */
 	@PostMapping
-	public CharSheet  createNewCampaign(CharSheet newCharSheet) {
+	public CharSheet  createNewCharSheet(CharSheet newCharSheet) {
 		return charServ.addCharSheet(newCharSheet);
 	}
 	

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,7 +54,11 @@ public class CampaignController {
 	 * @return
 	 */
 	@PostMapping(value="/new-campaign")
-	public Campaign  createNewCampaign(Campaign newCampaign) {
+	public Campaign  createNewCampaign(@RequestBody Campaign newCampaign) {
+		String username = ((User)newCampaign.getUsers().toArray()[0]).getUsername();
+		User u = userServ.getByUsername(username).get();
+		newCampaign.getUsers().clear();
+		newCampaign.addUser(u);
 		return campServ.addCampaign(newCampaign);
 	}
 	/**
