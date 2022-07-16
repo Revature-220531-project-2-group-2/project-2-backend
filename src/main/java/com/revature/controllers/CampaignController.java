@@ -117,8 +117,7 @@ public class CampaignController {
 		if(!campaign.isPresent() || !user.isPresent()) {
 			return new ResponseEntity<Campaign>(HttpStatus.BAD_REQUEST);
 		}else {
-			user.get().getCampaigns().remove(campaign.get());
-			campaign.get().removeUser(user.get());
+			campServ.removeUserFromCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());
 		}
 	}

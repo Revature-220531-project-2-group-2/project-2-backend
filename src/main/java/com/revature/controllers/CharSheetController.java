@@ -39,7 +39,7 @@ public class CharSheetController {
 	
 	
 	@GetMapping(value="/{id}")
-	public ResponseEntity<CharSheet> findCharSheetById(@PathVariable("campaignId") int id) {
+	public ResponseEntity<CharSheet> findCharSheetById(@PathVariable("id") int id) {
 		Optional<CharSheet> charSheet = charRepo.findById(id);
 		if(!charSheet.isPresent()) {
 			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
