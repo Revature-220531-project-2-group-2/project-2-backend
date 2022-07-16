@@ -40,14 +40,12 @@ public class CampaignService {
 		return campRepo.findById(id);
 	}
 	public void addUserToCampaign(User u, Campaign c) {
-
 		c.addUser(u);
 		campRepo.save(c);
 	
 	}
 	public void removeUserFromCampaign(User u, Campaign c) {
 	
-
 		c.removeUser(u);
 		campRepo.save(c);
 			

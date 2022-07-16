@@ -6,7 +6,6 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.revature.data.CharSheetRepository;
-import com.revature.models.Attribute;
 import com.revature.models.CharSheet;
 
 @Service
@@ -28,8 +27,10 @@ public class CharSheetService {
 		// TODO Auto-generated method stub
 		return charRepo.findCharSheetByCharName(charName);
 	}
-	public void deleteCharShee(CharSheet cs) {
+
+	public void deleteCharSheet(CharSheet cs) {
 		charRepo.delete(cs);
+
 	}
 
 	public CharSheet addCharSheet(CharSheet cs) {

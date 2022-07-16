@@ -12,7 +12,7 @@ import com.revature.models.CharSheet;
 public interface CharSheetRepository extends JpaRepository<CharSheet, Integer>{
 
 	
-	public CharSheet findCharSheetByUserId(int id);
+	public CharSheet findCharSheetByCharId(int id);
 	
 	public Set<CharSheet> findAllCharSheetsByUserId(int id);
 	

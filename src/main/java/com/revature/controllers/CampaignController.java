@@ -40,15 +40,7 @@ public class CampaignController {
 	}
 	
 	
-	/**
-	 * Create and save a new Campaign
-	 * @param newCampaign
-	 * @return
-	 */
-	@PostMapping
-	public Campaign  createNewCampaign(@RequestBody Campaign newCampaign) {
-		return campServ.addCampaign(newCampaign);
-	}
+
 	
 	/**
 	 * Get a list of current campaigns
@@ -59,6 +51,19 @@ public class CampaignController {
 		return campServ.getAllCampaigns();
 	}
 	
+	/**
+	 * Create and save a new Campaign
+	 * @param newCampaign
+	 * @return
+	 */
+	@PostMapping(value="/new-campaign")
+	public Campaign  createNewCampaign(@RequestBody Campaign newCampaign) {
+		String username = ((User)newCampaign.getUsers().toArray()[0]).getUsername();
+		User u = userServ.getByUsername(username).get();
+		newCampaign.getUsers().clear();
+		newCampaign.addUser(u);
+		return campServ.addCampaign(newCampaign);
+	}
 
 	/**
 	 * Gets a campaign by its id
@@ -121,8 +126,7 @@ public class CampaignController {
 		if(!campaign.isPresent() || !user.isPresent()) {
 			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
 		}else {
-			user.get().getCampaigns().remove(campaign.get());
-			campaign.get().removeUser(user.get());
+			campServ.removeUserFromCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());
 		}
 	}
