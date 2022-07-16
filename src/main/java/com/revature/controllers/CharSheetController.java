@@ -7,12 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.data.CharSheetRepository;
 import com.revature.models.Attribute;
+import com.revature.models.Campaign;
 import com.revature.models.CharSheet;
+import com.revature.services.CharSheetService;
 
 /**
  *   characters should be able to:
@@ -29,6 +32,8 @@ import com.revature.models.CharSheet;
 public class CharSheetController {
 
 	private CharSheetRepository charRepo;
+	private CharSheetService charServ;
+	
 	public CharSheetController(CharSheetRepository charRepo) {
 		this.charRepo = charRepo;
 	}
@@ -86,6 +91,16 @@ public class CharSheetController {
 		} else {
 			return ResponseEntity.ok(charSheet.get().getAttributes());
 		}
+	}
+	
+	/**
+	 * Create and save a new Campaign
+	 * @param newCampaign
+	 * @return
+	 */
+	@PostMapping
+	public CharSheet  createNewCampaign(CharSheet newCharSheet) {
+		return charServ.addCharSheet(newCharSheet);
 	}
 	
 		

@@ -49,11 +49,22 @@ public class CharSheet{
 	private String charClass;
 	
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinTable(name="char_attrib", 
-		joinColumns = {@JoinColumn(name ="char_name", referencedColumnName = "char_name")},
-	inverseJoinColumns = {@JoinColumn(name ="attrib_id", referencedColumnName="attribute_id" )})
-	private Attribute attributes;
+//	@OneToOne(cascade = CascadeType.ALL)
+//	@JoinTable(name="char_attrib", 
+//		joinColumns = {@JoinColumn(name ="char_name", referencedColumnName = "char_name")},
+//	inverseJoinColumns = {@JoinColumn(name ="attrib_id", referencedColumnName="attribute_id" )})
+//	private Attribute attributes;
+	
+	/* Andrew's changes */ 
+	
+	private int strength;
+	private int dexterity;
+	private int constitution;
+	private int intelligence;
+	private int wisdom;
+	private int charisma;
+	
+	/* End of Andrew's changes */
 	
 	
 
