@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -45,7 +46,8 @@ public class CharSheet{
 	
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name ="attribute_id")
+	@JoinTable(name="char_attrib", joinColumns = {@JoinColumn(name ="char_sheet_id", referencedColumnName = "char_id")},
+	inverseJoinColumns = {@JoinColumn(name ="attrib_id", referencedColumnName="attribute_id" )})
 	private Attribute attributes;
 	
 	

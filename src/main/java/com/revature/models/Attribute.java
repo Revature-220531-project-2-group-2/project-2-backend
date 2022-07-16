@@ -24,7 +24,7 @@ public class Attribute {
 	@Column(name = "attribute_id")
 	private int attribId;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy="attributes")
+	@OneToOne(mappedBy="attributes")
 	private CharSheet charSheet;
 	
 	private int str;
