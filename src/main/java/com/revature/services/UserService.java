@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.data.UserRepository;
+import com.revature.models.CharSheet;
 import com.revature.models.User;
 
 @Service //STEREOTYPE Annotation which specifies the duties of this component
@@ -61,6 +62,13 @@ public class UserService {
 	
 	public void deleteUser(int id) {
 		userRepo.deleteById(id);
+	}
+
+
+	public CharSheet addCharSheet(User u, CharSheet newCharSheet) {
+		u.getCharacters().add(newCharSheet);
+		userRepo.save(u);
+		return newCharSheet;
 	}
 	
 	
