@@ -195,9 +195,17 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping(value="/{username}/add-character")
-	public CharSheet addNewCharacter(@PathVariable("username") String username, @RequestBody CharSheet newCharSheet) {
-		return charService.addCharSheet(newCharSheet);
-	}
+	public ResponseEntity<User> addNewCharacter(@PathVariable("username") String username, @RequestBody CharSheet newCharSheet) {
+		Optional<User> user = userService.getByUsername(username);
+		if(!user.isPresent()) {
+			return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+		}else {
+		   
+		    userService.addCharSheet(user.get(), newCharSheet);
+		    return ResponseEntity.ok(user.get());
+		}
+		    
+		}
 	
 	/**
 	 * Delete a character for the user

@@ -17,7 +17,8 @@ import com.revature.models.CharSheet;
 /**
  *   characters should be able to:
  *                    get all characters *
- *                    get character by id * "/{id}"
+ *                    get character by id *              "/id-{id}"
+ *                    get character by character name *  "/char-name-{charname}
  *                    get their attributes  * "/{id}/attributes"                
  *                    update/save their attributes  //handled by the user controller
  *                    
@@ -32,13 +33,37 @@ public class CharSheetController {
 		this.charRepo = charRepo;
 	}
 	
+	/**
+	 * Get all characters from the database
+	 * @return
+	 */
 	@GetMapping
 	public List<CharSheet> getAllCharacters(){
 		return charRepo.findAll();
 	}
 	
-	
-	@GetMapping(value="/{id}")
+	/**
+	 * Get character by character name
+	 * @param charName
+	 * @return
+	 */
+	@GetMapping (value="/char-name-{charname}")
+	public ResponseEntity<CharSheet> findCharSheeetByCharName(@PathVariable("charName") String charName){
+		
+		Optional<CharSheet> charSheet = charRepo.findCharSheetByCharName(charName);
+		if(!charSheet.isPresent()) {
+			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
+		} else {
+			return ResponseEntity.ok(charSheet.get());
+		}
+		
+	}
+	/**
+	 * Get character by id
+	 * @param id
+	 * @return
+	 */
+	@GetMapping(value="/id-{id}")
 	public ResponseEntity<CharSheet> findCharSheetById(@PathVariable("campaignId") int id) {
 		Optional<CharSheet> charSheet = charRepo.findById(id);
 		if(!charSheet.isPresent()) {
@@ -48,6 +73,11 @@ public class CharSheetController {
 		}
 	}
 	
+	/**
+	 * Get attributes by character id
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value="/{id}/attributes")
 	public ResponseEntity<Attribute> getAttributes(@PathVariable("id") int id){
 		Optional<CharSheet> charSheet = charRepo.findById(id);
