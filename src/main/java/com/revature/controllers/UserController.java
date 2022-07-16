@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Campaign;
@@ -32,16 +31,18 @@ import com.revature.services.UserService;
 	 *            be updated *
 	 *            be deleted *
 	 *            get a list of all users
+	 *            get a user by id                     "/id-{id}
+	 *            get a user by username               "/{username}
 	 *            create a new character *             "/{username}/add-character"
 	 *            
 	 *            update/save a specific character *   "/{username}/update-character"
 	 * 			  delete a specific character *        "/{username}/remove-character"
 	 *            retrieve their characters *          "/{username}/characters"
-	 *            retrieve a specific character by id  "/{username}/characters/{id}"
-	 *            or character name *                  "/{username}/characters/{char-name}"
-	 *            u
+	 *            retrieve a character by their name * "/{/{username}/characters/{charname}"
+	 *            
 	 *            
 	 *            retrieve a list of their campaigns *    "/{username}/campaigns
+	 *            retrieve a specific campaign user is in "/{username}/campaign-{id} 
 	 *            add themselves to a specific campaign*  "/{username}/campaigns/join-campaign-{id}
 	 *            can view all campaigns *                 "/{username}/view-all-campaigns"
 	 
@@ -105,8 +106,8 @@ public class UserController {
 	 * @param username The username of the user being searched for;
 	 * @return
 	 */
-	@GetMapping(value="/all")
-	public ResponseEntity<User> findUserByUserName(@RequestBody String username){
+	@GetMapping(value="/{username}")
+	public ResponseEntity<User> findUserByUserName(@PathVariable("username") String username){
 		Optional<User> user = userService.getByUsername(username);
 		if(!user.isPresent()) {
 			
@@ -122,7 +123,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/id-{id}")
 	public ResponseEntity<User> findUserById(@PathVariable("id") int id) {
 		Optional<User> user = userService.getById(id);
 		if(!user.isPresent()) {
@@ -141,6 +142,20 @@ public class UserController {
 	}
 	
 //=================================User Campaign Mappings =====================================================
+	/**
+	 * Get a Campaign From the Users campaigns by its id
+	 */
+	@GetMapping(value = "/{username}/campaign-{id}")
+	public ResponseEntity<Campaign> getCampaignById(@PathVariable("id") int id){
+		Optional<Campaign> campaign = campService.getCampaignById(id);
+		if(!campaign.isPresent()) {
+			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
+		}else {
+			
+			return ResponseEntity.ok(campaign.get());
+		}
+	
+	}
 	
 	/**
 	 * Returns the campaigns associated with a given username 
@@ -200,9 +215,10 @@ public class UserController {
 		if(!user.isPresent()) {
 			return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
 		}else {
-		   
-		    userService.addCharSheet(user.get(), newCharSheet);
-		    return ResponseEntity.ok(user.get());
+			
+			User u = user.get();
+		    userService.addCharSheet(u, newCharSheet);
+		    return ResponseEntity.ok(u);
 		}
 		    
 		}
@@ -211,11 +227,20 @@ public class UserController {
 	 * Delete a character for the user
 	 * @param delCharSheet
 	 */
-//TODO change this to entity
-	@PostMapping(value="/{username}/remove-character")
-	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet character) {
-		userService.getByUsername(username).get().getCharacters().remove(character);
-	}
+
+	@PostMapping(value="/{username}/delete-character")
+	public ResponseEntity<User> removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet character) {
+		Optional<User> user = userService.getByUsername(username);
+		if(!user.isPresent()) {
+			return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+		}else {		   
+			User u = user.get();
+		    userService.removeCharSheet(u, character);
+		    return ResponseEntity.ok(user.get());
+		}
+		    
+		}
+
 //	public void removeCharSheet(@PathVariable("username") String username, @RequestBody CharSheet delCharSheet) {
 //		charService.deleteCharSheetById(delCharSheet.getCharId());	
 //	}
@@ -240,23 +265,10 @@ public class UserController {
 		return charService.getCharactersByUsername(username);
 	}
 	
-	/**
-	 * Get a character by id
-	 * @param id
-	 * @return
-	 */
-	@GetMapping(value="/{username}/characters/get-{id}")
-	public ResponseEntity<CharSheet> findCharacterById(@PathVariable("id") int id) {
-		Optional<CharSheet> character = charService.findById(id);
-		if(!character.isPresent()) {
-			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
-		} else {
-			return ResponseEntity.ok(character.get());
-		}
-	}
 	
-	@GetMapping(value = "/{username}/characters/all")
-	public ResponseEntity<CharSheet> findCharacterByName(@RequestBody String charName){
+	
+	@GetMapping(value = "/{username}/characters/{charname}")
+	public ResponseEntity<CharSheet> findCharacterByName(@PathVariable("charname") String charName){
 		Optional<CharSheet> character = charService.findByCharName(charName);
 		if(!character.isPresent()) {
 			

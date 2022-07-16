@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,9 +20,9 @@ import com.revature.services.UserService;
 
 /**
  * CampaignController:
+ *               can create a new campaign                      
  *               can get a list of all campaigns
- *               can get a specific campaign by id              "/{id}
- *               can create a new campaign                      "/new-campaign"
+ *               can get a specific campaign by id              "/{id} 
  *               can get a list of users attached to a campaign "/{id}/users"
  *               can add a user to a specific campaign          "/{id}/add-{username}"
  *               can remove a user from a specific campaign     "/{id}/remove-{username}"
@@ -38,6 +39,17 @@ public class CampaignController {
 		this.userServ = userv;
 	}
 	
+	
+	/**
+	 * Create and save a new Campaign
+	 * @param newCampaign
+	 * @return
+	 */
+	@PostMapping
+	public Campaign  createNewCampaign(@RequestBody Campaign newCampaign) {
+		return campServ.addCampaign(newCampaign);
+	}
+	
 	/**
 	 * Get a list of current campaigns
 	 * @return
@@ -47,15 +59,7 @@ public class CampaignController {
 		return campServ.getAllCampaigns();
 	}
 	
-	/**
-	 * Create and save a new Campaign
-	 * @param newCampaign
-	 * @return
-	 */
-	@PostMapping(value="/new-campaign")
-	public Campaign  createNewCampaign(Campaign newCampaign) {
-		return campServ.addCampaign(newCampaign);
-	}
+
 	/**
 	 * Gets a campaign by its id
 	 * @param id
@@ -96,7 +100,7 @@ public class CampaignController {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		Optional<User> user = userServ.getByUsername(username);
 		if(!campaign.isPresent() || !user.isPresent()) {
-			return new ResponseEntity<Campaign>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
 		}else {
 			campServ.addUserToCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());
@@ -115,7 +119,7 @@ public class CampaignController {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		Optional<User> user = userServ.getByUsername(username);
 		if(!campaign.isPresent() || !user.isPresent()) {
-			return new ResponseEntity<Campaign>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
 		}else {
 			user.get().getCampaigns().remove(campaign.get());
 			campaign.get().removeUser(user.get());

@@ -18,10 +18,7 @@ public class CharSheetService {
 		this.charRepo = charRepo;
 	}
 	
-	public Optional<CharSheet> findById(int id) {
-		return charRepo.findById(id);
-	}
-	
+
 	/*
 	 * public Optional<CharSheet> findByCharName(String name) { return
 	 * charRepo.findCharSheetByCharName(name); }
@@ -31,8 +28,8 @@ public class CharSheetService {
 		// TODO Auto-generated method stub
 		return charRepo.findCharSheetByCharName(charName);
 	}
-	public void deleteCharSheetById(int id) {
-		charRepo.deleteById(id);
+	public void deleteCharShee(CharSheet cs) {
+		charRepo.delete(cs);
 	}
 
 	public CharSheet addCharSheet(CharSheet cs) {

@@ -16,22 +16,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.revature.services.CampaignService;
 import com.revature.services.CharSheetService;
 import com.revature.services.UserService;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@EqualsAndHashCode(exclude={"campaigns", "characters"}) @ToString(exclude= {"campaigns", "characters"})
 public class User {
 
 	
@@ -56,7 +62,6 @@ public class User {
 	//@ElementCollection
 	//@CollectionTable(name = "user_characters", joinColumns = @JoinColumn(name = "owner_id"))
 	@OneToMany(cascade=CascadeType.ALL, mappedBy ="user")
-	@Column(name = "char_sheet")
 	private Set<CharSheet> characters;
 
 	@ManyToMany

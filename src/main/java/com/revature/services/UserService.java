@@ -70,6 +70,13 @@ public class UserService {
 		userRepo.save(u);
 		return newCharSheet;
 	}
+
+
+	public void removeCharSheet(User user, CharSheet character) {
+		user.getCharacters().remove(character);
+		userRepo.save(user);
+			
+	}
 	
 	
 
