@@ -44,7 +44,10 @@ public class CampaignController {
 	 * @return
 	 */
 	@GetMapping
-	public List<Campaign> getAllCampaigns(){
+	public List<Campaign> getAllCampaigns() {
+		List<Campaign> camps = campServ.getAllCampaigns();
+		camps.forEach(e -> System.out.println(e.getUsers()));
+		System.out.println(camps);
 		return campServ.getAllCampaigns();
 	}
 	
