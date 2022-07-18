@@ -35,9 +35,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode(exclude={"char_sheet", "user_campaigns"}) 
-@ToString(exclude= {"char_sheet", "user_campaigns", "campaigns"})
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="username")
+@EqualsAndHashCode(exclude={"char_sheet"}) 
+@ToString(exclude= {"char_sheet", "campaigns"})
 @JsonIgnoreProperties(value = { "characters", "campaigns" })
 public class User {
 
