@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -89,8 +90,8 @@ public class CampaignController {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		if(campaign.isPresent()) {
 			return campaign.get().getUsers();
-		}else {
-			return null;
+		}else { //return empty set	
+			return new HashSet<User>();
 		}
 	}
 

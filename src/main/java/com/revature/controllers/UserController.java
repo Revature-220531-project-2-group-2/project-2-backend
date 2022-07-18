@@ -211,7 +211,7 @@ public class UserController {
 	 */
 	@PostMapping(value="/{username}/add-character")
 	public ResponseEntity<User> addNewCharacter(@PathVariable("username") String username, @RequestBody CharSheet newCharSheet) {
-		System.out.println("\n\nusername  " + username + "\n\n");
+		
 		Optional<User> user = userService.getByUsername(username);
 		if(!user.isPresent()) {
 			return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
@@ -252,7 +252,7 @@ public class UserController {
 	public void updateCharSheet(@PathVariable("username") String username, 
 			@PathVariable("id") int charId, @RequestBody CharSheet updatedCharSheet) {
 		// some sort of logic to see that charId belongs to this user
-		System.out.println(updatedCharSheet);
+		
 		User u = userService.getByUsername(username).get();
 		userService.updateCharSheet(u, updatedCharSheet);
 //		charService.updateCharSheet(updatedCharSheet);
