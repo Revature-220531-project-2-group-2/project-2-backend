@@ -1,6 +1,5 @@
 package com.revature.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -103,6 +102,8 @@ public class User {
 		this.characters.removeIf(e -> e.getCharId() == c.getCharId());
 
 	}
+
+	
 
 }
 

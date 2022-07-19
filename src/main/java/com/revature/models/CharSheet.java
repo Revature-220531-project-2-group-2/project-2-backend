@@ -30,7 +30,7 @@ import lombok.ToString;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="charId")
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="charId")
 //@ToString(exclude= {"user"})
 @EqualsAndHashCode(exclude={"user"})
 public class CharSheet{
