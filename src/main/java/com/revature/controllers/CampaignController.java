@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,9 +21,9 @@ import com.revature.services.UserService;
 
 /**
  * CampaignController:
+ *               can create a new campaign                      
  *               can get a list of all campaigns
- *               can get a specific campaign by id              "/{id}
- *               can create a new campaign                      "/new-campaign"
+ *               can get a specific campaign by id              "/{id} 
  *               can get a list of users attached to a campaign "/{id}/users"
  *               can add a user to a specific campaign          "/{id}/add-{username}"
  *               can remove a user from a specific campaign     "/{id}/remove-{username}"
@@ -38,6 +39,9 @@ public class CampaignController {
 		this.campServ = campServ;
 		this.userServ = userv;
 	}
+	
+	
+
 	
 	/**
 	 * Get a list of current campaigns
@@ -61,6 +65,7 @@ public class CampaignController {
 		newCampaign.addUser(u);
 		return campServ.addCampaign(newCampaign);
 	}
+
 	/**
 	 * Gets a campaign by its id
 	 * @param id
@@ -85,8 +90,8 @@ public class CampaignController {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		if(campaign.isPresent()) {
 			return campaign.get().getUsers();
-		}else {
-			return null;
+		}else { //return empty set	
+			return new HashSet<User>();
 		}
 	}
 
@@ -101,7 +106,7 @@ public class CampaignController {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		Optional<User> user = userServ.getByUsername(username);
 		if(!campaign.isPresent() || !user.isPresent()) {
-			return new ResponseEntity<Campaign>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
 		}else {
 			campServ.addUserToCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());
@@ -120,7 +125,7 @@ public class CampaignController {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		Optional<User> user = userServ.getByUsername(username);
 		if(!campaign.isPresent() || !user.isPresent()) {
-			return new ResponseEntity<Campaign>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
 		}else {
 			campServ.removeUserFromCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());

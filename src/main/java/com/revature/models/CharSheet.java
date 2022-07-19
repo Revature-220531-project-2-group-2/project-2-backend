@@ -1,7 +1,6 @@
 package com.revature.models;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,11 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.Cascade;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -26,14 +22,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
+@Table(name = "characters")
 @Data @NoArgsConstructor @AllArgsConstructor
 //@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="charId")
 //@ToString(exclude= {"user"})
 @EqualsAndHashCode(exclude={"user"})
 public class CharSheet{
+
 	//TODO start here and work with join table
 	@Column(name="char_name")
 	private String charName;
@@ -45,14 +42,14 @@ public class CharSheet{
 	private int charId;
 	
 	
+
 	
 	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="user_id", nullable = false)
 	private User user;
 	
 	
-//	@Column(unique = true, name="char_name")
-//	private String charName;
-//	
+
 	private String race;
 	
 	@Column(name = "class")
@@ -76,7 +73,6 @@ public class CharSheet{
 	
 	/* End of Andrew's changes */
 	
-	
 
 	@ElementCollection
 	@CollectionTable(name="spells", joinColumns= {@JoinColumn(name = "char_id" )})
@@ -87,14 +83,14 @@ public class CharSheet{
 	@CollectionTable(name="equipment", joinColumns= { @JoinColumn(name = "char_id" )})
 	private List<String> equipment;
 
-
-	public void removeUser(User u) {
-		user =null;
-	}
-
-	public void addUser(User u) {
-		// TODO Auto-generated method stub
-		user = u;
-	}
+// DO YOU NEED THESE HERE???? USERS SHOULD BE REMOVED FROM THE USER CONTROLLER
+//	public void removeUser(User u) {
+//		user =null;
+//	}
+//
+//	public void addUser(User u) {
+//		// TODO Auto-generated method stub
+//		user = u;
+//	}
 	
 }
