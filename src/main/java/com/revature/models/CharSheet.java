@@ -75,7 +75,6 @@ public class CharSheet{
 	
 
 	@ElementCollection
-
 	@CollectionTable(name="spells", joinColumns= {@JoinColumn(name = "char_id" )})
 	private Set<String> spells;
 	
@@ -84,14 +83,14 @@ public class CharSheet{
 	@CollectionTable(name="equipment", joinColumns= { @JoinColumn(name = "char_id" )})
 	private List<String> equipment;
 
-
-	public void removeUser(User u) {
-		user =null;
-	}
-
-	public void addUser(User u) {
-		// TODO Auto-generated method stub
-		user = u;
-	}
+// DO YOU NEED THESE HERE???? USERS SHOULD BE REMOVED FROM THE USER CONTROLLER
+//	public void removeUser(User u) {
+//		user =null;
+//	}
+//
+//	public void addUser(User u) {
+//		// TODO Auto-generated method stub
+//		user = u;
+//	}
 	
 }

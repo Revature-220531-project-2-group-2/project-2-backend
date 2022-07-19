@@ -2,7 +2,6 @@ package com.revature.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -91,7 +90,7 @@ public class UserService {
 	public CharSheet updateCharSheet(User u, CharSheet aCharSheet) {
 
 		u.updateCharacter(aCharSheet);
-		aCharSheet.addUser(u);
+	//	aCharSheet.addUser(u);
 		userRepo.save(u);
 //		userRepo.save(u);
 		return aCharSheet;
@@ -99,7 +98,7 @@ public class UserService {
 	
 	public CharSheet deleteCharSheet(User u, CharSheet aCharSheet) {
 		u.deleteCharacter(aCharSheet);
-		aCharSheet.removeUser(u);
+	//	aCharSheet.removeUser(u);
 		userRepo.save(u);
 		charRepo.deleteById(aCharSheet.getCharId());
 //		userRepo.save(u);
