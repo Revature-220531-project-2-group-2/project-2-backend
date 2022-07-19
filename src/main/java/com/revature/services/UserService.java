@@ -64,13 +64,14 @@ public class UserService {
 	}
 	
 	
-	public void deleteUser(int id) {
-		userRepo.deleteById(id);
+	//changed by kburke for testing purposes to return the User that has been deleted
+	public Optional<User> deleteUser(int id) {
+		return userRepo.deleteById(id);
 	}
 
 
 	public CharSheet addCharSheet(User u, CharSheet newCharSheet) {
-		System.out.println(newCharSheet);
+		
 		newCharSheet.setUser(u);
 
 //		Set<CharSheet> mySheets = charRepo.findAllCharSheetsByUserId(u.getId());
@@ -81,29 +82,32 @@ public class UserService {
 	}
 
 
-	public void removeCharSheet(User user, CharSheet character) {
+	/**
+	 * Removes a specific character from the the users character list
+	 * @param user
+	 * @param character
+	 * @return The character that has been removed from the users character list
+	 */
+	public User removeCharSheet(User user, CharSheet character) {
 		user.getCharacters().remove(character);
-		userRepo.save(user);
-			
+		return userRepo.save(user);
+		
 	}
 	
-	public CharSheet updateCharSheet(User u, CharSheet aCharSheet) {
+	/**
+	 * Adds a character to the user's list and updates the user
+	 * @param u
+	 * @param aCharSheet
+	 * @return The updated user
+	 */
+	public User updateCharSheet(User u, CharSheet aCharSheet) {
 
 		u.updateCharacter(aCharSheet);
-	//	aCharSheet.addUser(u);
-		userRepo.save(u);
-//		userRepo.save(u);
-		return aCharSheet;
+		return userRepo.save(u);
+		
 	}
 	
-	public CharSheet deleteCharSheet(User u, CharSheet aCharSheet) {
-		u.deleteCharacter(aCharSheet);
-	//	aCharSheet.removeUser(u);
-		userRepo.save(u);
-		charRepo.deleteById(aCharSheet.getCharId());
-//		userRepo.save(u);
-		return aCharSheet;
-	}
+
 	
 
 	

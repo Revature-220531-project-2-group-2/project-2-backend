@@ -28,8 +28,9 @@ public class CharSheetService {
 		return charRepo.findCharSheetByCharName(charName);
 	}
 
-	public void deleteCharSheet(CharSheet cs) {
+	public CharSheet deleteCharSheet(CharSheet cs) {
 		charRepo.delete(cs);
+		return cs;
 
 	}
 

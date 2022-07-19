@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,6 +17,7 @@ import org.junit.Test;
 
 import com.revature.data.CharSheetRepository;
 import com.revature.data.UserRepository;
+import com.revature.models.CharSheet;
 import com.revature.models.User;
 import com.revature.services.UserService;
 
@@ -42,7 +45,12 @@ public class UserServiceTests {
 		dummyUser = null;
 				
 	}
-	
+	@Test
+	public void testProcessRegister() {
+		User testUser = new User(12, "bobby", "password", "bob@mail.com", null, null);
+		when(mockUserRepo.save(testUser)).thenReturn(testUser);
+		assertEquals(testUser,userv.processRegister(testUser));
+	}
 	//Test username and password are correct
 	@Test
 	public void testSuccessfulLogin() {
@@ -142,7 +150,7 @@ public class UserServiceTests {
 		
 		assertNull(actualReturnedUser);
 	}
-	
+	//========================TEST GET ALL USERS ===========================
 	@Test //get All Users
 	public void testGetAllUsers() {
 		User user1= new User(12, "bobby", "password", "bob@mail.com", null, null);
@@ -156,8 +164,50 @@ public class UserServiceTests {
 	}
 	
 	
+	@Test 
+	public void testUpdateUser() {
 	
-	
+		User changedUser= new User(12, "bobby", "password", "bob@mail.com", null, null);
+		when(mockUserRepo.save(changedUser)).thenReturn(changedUser);
+		
+		assertEquals(changedUser, userv.updateUser(changedUser));
+		
+	}
 
+	@Test 
+	public void testDeleteUser() {
+	
+		User changedUser= new User(12, "bobby", "password", "bob@mail.com", null, null);
+	
+		
+		when(mockUserRepo.deleteById(12)).thenReturn(Optional.of(changedUser));
+		
+		assertEquals(changedUser, userv.deleteUser(12).get());
+		
+	}
+	
+	@Test
+	public void testAddCharSheet() {
+		CharSheet character =  new CharSheet("dave",1,null, "elf", "druid", 3,4,5,6,7,8,null,null);
+		User dummyUser= new User(12, "bobby", "password", "bob@mail.com", null, null);
+		when(mockCharRepo.save(character)).thenReturn(character);
+		assertEquals(character, userv.addCharSheet(dummyUser, character));
+	}
+	@Test 
+	public void testRemoveCharSheet() {
+	
+		Set<CharSheet> characters = new HashSet<CharSheet>();
+		
+		CharSheet character =  new CharSheet("dave",1,null, "elf", "druid", 3,4,5,6,7,8,null,null);
+		characters.add(character);
+		User dummyUser= new User(12, "bobby", "password", "bob@mail.com", characters, null);
+		
+		when(mockUserRepo.save(dummyUser)).thenReturn(dummyUser);
+		
+		assertEquals(dummyUser, userv.removeCharSheet(dummyUser,character));
+		
+	}
+	
+	
 }
 

@@ -60,7 +60,16 @@ public class CharSheetServicesTest {
 	  
 	  assertNull(charServ.findByCharName("davis"));
 	}
-	//================ADD CHAR SHEET============================
+	//===================TEST UpdateCharSheet
+	 @Test
+	 public void testUpdateCharSheet() {
+		 CharSheet updated = dummyCharacter;
+		 when(mockCharRepo.save(updated)).thenReturn(updated);
+		 assertEquals(updated, charServ.updateCharSheet(updated));
+	 }
+	 
+	
+	//================ADD CHAR SHEEET============================
 	@Test
 	public void testAddCharSheetTest() {
 		
@@ -68,6 +77,7 @@ public class CharSheetServicesTest {
 		
 		assertEquals(dummyCharacter, charServ.addCharSheet(dummyCharacter));
 	}
+	
 	
 	//===================GET CHAR BY USERNAME ===========================
 	@Test
@@ -81,6 +91,20 @@ public class CharSheetServicesTest {
 	    Set<CharSheet> actual = charServ.getCharactersByUsername("bobby");
 		assertEquals(expected, actual);
 	}
+	@Test
+	public void testGetCharactersByUsernameNotValid() {
+		Set<CharSheet> characters = new HashSet<CharSheet>();
+		characters.add(dummyCharacter);
+		
+		when(mockCharRepo.findCharSheetsByUserUsername("hijinks")).thenReturn(null);
+		
+		assertNull(charServ.getCharactersByUsername("hijinks"));
+	}
 	
+	@Test
+	public void testSave() {
+		when(mockCharRepo.save(dummyCharacter)).thenReturn(dummyCharacter);
+		assertEquals(dummyCharacter, charServ.save(dummyCharacter));
+	}
 			
 }

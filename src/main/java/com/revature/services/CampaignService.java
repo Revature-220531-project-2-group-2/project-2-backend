@@ -3,13 +3,11 @@ package com.revature.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.revature.data.CampaignRepository;
-import com.revature.data.UserRepository;
 import com.revature.models.Campaign;
 import com.revature.models.User;
 
@@ -30,24 +28,24 @@ public class CampaignService {
 		return campRepo.findAll();
 	}
 	
-	public Set<Campaign> getCampaignsByUsername(User u){
-		return campRepo.findAll().stream().filter(c -> c.getUsers().contains(u))			
-				.collect(Collectors.toSet());
-				
-	}
+//	public Set<Campaign> getCampaignsByUser(User u){
+//		return campRepo.findAll().stream().filter(c -> c.getUsers().contains(u))			
+//				.collect(Collectors.toSet());
+//				
+//	}
 
 	public Optional<Campaign> getCampaignById(int id) {
 		return campRepo.findById(id);
 	}
-	public void addUserToCampaign(User u, Campaign c) {
+	public Campaign addUserToCampaign(User u, Campaign c) {
 		c.addUser(u);
-		campRepo.save(c);
+		return campRepo.save(c);
 	
 	}
-	public void removeUserFromCampaign(User u, Campaign c) {
+	public Campaign removeUserFromCampaign(User u, Campaign c) {
 	
 		c.removeUser(u);
-		campRepo.save(c);
+		return campRepo.save(c);
 			
 	}
 	
@@ -68,8 +66,9 @@ public class CampaignService {
 		return campRepo.save(cp);
 	}
 	
-	public List<Campaign> getCampaignsByUsername(String username){
-		return campRepo.findAll();
+	public List<Campaign> getCampaignsByUser(User user){
+		return campRepo.findAll().stream()
+				.filter(c -> c.getUsers().contains(user)).collect(Collectors.toList());
 
 	}
 }

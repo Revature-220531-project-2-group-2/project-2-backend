@@ -36,7 +36,7 @@ import com.revature.services.UserService;
 	 *            create a new character *             "/{username}/add-character"
 	 *            
 	 *            update/save a specific character *   "/{username}/update-character"
-	 * 			  delete a specific character *        "/{username}/remove-character"
+	 * 			  remove a specific character *        "/{username}/remove-character"
 	 *            retrieve their characters *          "/{username}/characters"
 	 *            retrieve a character by their name * "/{/{username}/characters/{charname}"
 	 *            
@@ -164,7 +164,9 @@ public class UserController {
 	 */
 	@GetMapping(value = "/{username}/campaigns")
 	public ResponseEntity<List<Campaign>> getCampaignByUser(@PathVariable("username") String username){
-		List<Campaign> campaigns = campService.getCampaignsByUsername(username);
+	    Optional<User> user = this.userService.getByUsername(username);	
+	    
+		List<Campaign> campaigns = user.isPresent() ? campService.getCampaignsByUser(user.get()) : null;
 		if(campaigns == null) {
 			return new ResponseEntity<List<Campaign>>(HttpStatus.NO_CONTENT);
 		}else {
