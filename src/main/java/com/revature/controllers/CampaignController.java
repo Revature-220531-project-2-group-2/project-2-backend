@@ -46,14 +46,14 @@ public class CampaignController {
 	}
 	
 	@PostMapping("/{id}/new-message")
-	public String addMessage(@PathVariable("id") int id, @RequestBody Campaign c, Message msg){
-		
-		return campServ.addMessage(c, msg);
+	public String addMessage(@PathVariable("id") int id, @RequestBody Message msg){
+		Optional<Campaign> c = campServ.getCampaignById(id);
+		return (c.isPresent()) ? campServ.addMessage(c.get(), msg) : null;
 	}
 
 	@GetMapping("/{id}/messages")
-	public List<Message> getAllMessages(int id){
-		return campServ.getMessagesFromCampaign(id);
+	public List<Message> getAllMessages(@PathVariable("id") int id){
+	   return  campServ.getMessagesFromCampaign(id);
 	}
 	/**
 	 * Get a list of current campaigns
@@ -74,10 +74,7 @@ public class CampaignController {
 	 */
 	@PostMapping(value="/new-campaign")
 	public Campaign  createNewCampaign(@RequestBody Campaign newCampaign) {
-		String username = ((User)newCampaign.getUsers().toArray()[0]).getUsername();
-		User u = userServ.getByUsername(username).get();
-		newCampaign.getUsers().clear();
-		newCampaign.addUser(u);
+		
 		return campServ.addCampaign(newCampaign);
 	}
 
@@ -96,7 +93,7 @@ public class CampaignController {
 		}
 	}
 	/**
-	 * Return a list of users attached to asoociated with a given campaign
+	 * Return a list of users attached to associated with a given campaign
 	 * @param id
 	 * @return
 	 */

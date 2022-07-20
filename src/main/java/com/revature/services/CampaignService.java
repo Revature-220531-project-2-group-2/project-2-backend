@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.revature.data.CampaignRepository;
+import com.revature.data.MessagesRepository;
 import com.revature.models.Campaign;
 import com.revature.models.Message;
 import com.revature.models.User;
@@ -19,11 +20,13 @@ public class CampaignService {
 
 
 	private CampaignRepository campRepo;
+
+	private MessagesRepository msgRepo;
 	
-	
-	public CampaignService(CampaignRepository campRepo) {
+	public CampaignService(CampaignRepository campRepo,  MessagesRepository msgRepo) {
 		this.campRepo = campRepo;
 		
+		this.msgRepo = msgRepo;
 	}
 	
 	public List<Campaign> getAllCampaigns(){
@@ -41,6 +44,8 @@ public class CampaignService {
 	}
 	public Campaign addUserToCampaign(User u, Campaign c) {
 		c.addUser(u);
+	
+	
 		return campRepo.save(c);
 	
 	}
@@ -83,7 +88,9 @@ public class CampaignService {
 	public String addMessage(Campaign c, Message msg) {
 		c.getMessages().add(msg);
 	    campRepo.save(c);
-	    return msg.getMsg();
+	    return msgRepo.save(msg).getMsg();
+	    
+	    
 	}
 	
 	/**
@@ -93,6 +100,7 @@ public class CampaignService {
 	 */
 	public List<Message> getMessagesFromCampaign(int campId){
 		Optional<Campaign> campaign = campRepo.findById(campId);
+		
 		return (campaign.isPresent()) ? campaign.get().getMessages() : new LinkedList<Message>();
 	}
 }

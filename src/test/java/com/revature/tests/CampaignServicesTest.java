@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.revature.data.CampaignRepository;
+import com.revature.data.MessagesRepository;
+import com.revature.data.UserRepository;
 import com.revature.models.Campaign;
 import com.revature.models.Message;
 import com.revature.models.User;
@@ -24,6 +25,8 @@ import com.revature.services.CampaignService;
 public class CampaignServicesTest {
 	
 	private CampaignRepository mockCampaignRepo;
+	private UserRepository mockUserRepo;
+	private MessagesRepository mockMsgRepo;
 	private CampaignService campServ;
 	private Campaign dummyCampaign;
 	private User user;
@@ -34,12 +37,14 @@ public class CampaignServicesTest {
 	public void setup() {
 		
 		mockCampaignRepo = mock(CampaignRepository.class);
+		mockMsgRepo = mock(MessagesRepository.class);
 		
-		campServ = new CampaignService(mockCampaignRepo);
+		campServ = new CampaignService(mockCampaignRepo, mockMsgRepo);
 	
 
 		user = new User(12, "bobby", "password", "bob@mail.com", null, null);
 	    messages = new LinkedList<Message>();
+	    
 		users = new HashSet<User>();
 		users.add(user);
 	    dummyCampaign = new Campaign(1, "camp1", users, messages);
