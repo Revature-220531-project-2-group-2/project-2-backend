@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Campaign;
+import com.revature.models.Message;
 import com.revature.models.User;
 import com.revature.services.CampaignService;
 import com.revature.services.UserService;
@@ -28,6 +29,8 @@ import com.revature.services.UserService;
  *               can get a list of users attached to a campaign "/{id}/users"
  *               can add a user to a specific campaign          "/{id}/add-{username}"
  *               can remove a user from a specific campaign     "/{id}/remove-{username}"
+ *               can add a message to the campaign              "/{id}/new-message
+ *               can retrieve message list form the campaign    "/{id}/messages
  */
 @RestController
 @CrossOrigin(origins="*", allowedHeaders="*")
@@ -42,9 +45,16 @@ public class CampaignController {
 		this.userServ = userv;
 	}
 	
-	
+	@PostMapping("/{id}/new-message")
+	public String addMessage(@PathVariable("id") int id, @RequestBody Message msg){
+		Optional<Campaign> c = campServ.getCampaignById(id);
+		return (c.isPresent()) ? campServ.addMessage(c.get(), msg) : null;
+	}
 
-	
+	@GetMapping("/{id}/messages")
+	public List<Message> getAllMessages(@PathVariable("id") int id){
+	   return  campServ.getMessagesFromCampaign(id);
+	}
 	/**
 	 * Get a list of current campaigns
 	 * @return
@@ -64,10 +74,7 @@ public class CampaignController {
 	 */
 	@PostMapping(value="/new-campaign")
 	public Campaign  createNewCampaign(@RequestBody Campaign newCampaign) {
-		String username = ((User)newCampaign.getUsers().toArray()[0]).getUsername();
-		User u = userServ.getByUsername(username).get();
-		newCampaign.getUsers().clear();
-		newCampaign.addUser(u);
+		
 		return campServ.addCampaign(newCampaign);
 	}
 
@@ -86,7 +93,7 @@ public class CampaignController {
 		}
 	}
 	/**
-	 * Return a list of users attached to asoociated with a given campaign
+	 * Return a list of users attached to associated with a given campaign
 	 * @param id
 	 * @return
 	 */
