@@ -26,7 +26,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="campaignId")
 @EqualsAndHashCode(exclude={"users"})
-@ToString(exclude= {"users"})
+@ToString()
 public class Campaign {
 
 	

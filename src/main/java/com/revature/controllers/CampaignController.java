@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import com.revature.services.UserService;
  *               can remove a user from a specific campaign     "/{id}/remove-{username}"
  */
 @RestController
+@CrossOrigin(origins="*", allowedHeaders="*")
 @RequestMapping("/campaigns")
 public class CampaignController {
 
@@ -48,7 +50,10 @@ public class CampaignController {
 	 * @return
 	 */
 	@GetMapping
-	public List<Campaign> getAllCampaigns(){
+	public List<Campaign> getAllCampaigns() {
+		List<Campaign> camps = campServ.getAllCampaigns();
+		camps.forEach(e -> System.out.println(e.getUsers()));
+		System.out.println(camps);
 		return campServ.getAllCampaigns();
 	}
 	
