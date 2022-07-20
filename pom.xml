@@ -16,7 +16,10 @@
 	<description>Demo project for a restful API</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<sonar.organization>team007</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
+	
 	<dependencies>
 
 		<dependency>
@@ -113,11 +116,19 @@
 			<version>1.10.19</version>
 			<scope>test</scope>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+<dependency>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.7</version>
+</dependency>
+		
+		
 
 	</dependencies>
 
 	<build>
+	
 		<plugins>
 		<plugin>
 				<groupId>org.springframework.boot</groupId>
