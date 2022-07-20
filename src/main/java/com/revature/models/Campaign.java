@@ -24,8 +24,10 @@ import lombok.ToString;
 @Table(name="campaigns")
 @Data
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="campaignId")
+
 @EqualsAndHashCode(exclude={"users","messages"})
 @ToString(exclude= {"users","messages"})
+
 public class Campaign {
 
 			

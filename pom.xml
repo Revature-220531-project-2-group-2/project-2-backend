@@ -10,8 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.revature</groupId>
-	<artifactId>dungens-and-dragons-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>project-2-backend</artifactId>
 	<name>dungens-and-dragons-app</name>
 	<description>Demo project for a restful API</description>
 	<properties>
