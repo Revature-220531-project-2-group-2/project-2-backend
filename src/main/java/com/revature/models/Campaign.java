@@ -13,7 +13,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
@@ -54,7 +53,6 @@ public class Campaign {
 	}
 
 	public void addUser(User u) {
-		// TODO Auto-generated method stub
 		users.add(u);
 		u.getCampaigns().add(this);
 	}

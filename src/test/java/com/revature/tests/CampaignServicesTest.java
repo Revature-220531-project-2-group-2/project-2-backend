@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.junit.Test;
 
 import com.revature.data.CampaignRepository;
 import com.revature.models.Campaign;
+import com.revature.models.Message;
 import com.revature.models.User;
 import com.revature.services.CampaignService;
 
@@ -26,6 +28,7 @@ public class CampaignServicesTest {
 	private Campaign dummyCampaign;
 	private User user;
 	private Set<User> users;
+	private List<Message> messages;
 	
 	@Before
 	public void setup() {
@@ -36,9 +39,10 @@ public class CampaignServicesTest {
 	
 
 		user = new User(12, "bobby", "password", "bob@mail.com", null, null);
+	    messages = new LinkedList<Message>();
 		users = new HashSet<User>();
 		users.add(user);
-	    dummyCampaign = new Campaign(1, "camp1", users);
+	    dummyCampaign = new Campaign(1, "camp1", users, messages);
 	}
 	
 	@After 
