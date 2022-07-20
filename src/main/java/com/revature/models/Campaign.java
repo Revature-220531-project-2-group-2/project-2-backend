@@ -32,7 +32,7 @@ public class Campaign {
 	
 		
 	@Id
-	@Column(name="campaigns_id")
+	@Column(name="campaign_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int campaignId;
 	
