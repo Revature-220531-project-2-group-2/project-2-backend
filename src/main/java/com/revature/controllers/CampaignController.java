@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Campaign;
+import com.revature.models.Message;
 import com.revature.models.User;
 import com.revature.services.CampaignService;
 import com.revature.services.UserService;
@@ -27,6 +28,8 @@ import com.revature.services.UserService;
  *               can get a list of users attached to a campaign "/{id}/users"
  *               can add a user to a specific campaign          "/{id}/add-{username}"
  *               can remove a user from a specific campaign     "/{id}/remove-{username}"
+ *               can add a message to the campaign              "/{id}/new-message
+ *               can retrieve message list form the campaign    "/{id}/messages
  */
 @RestController
 @RequestMapping("/campaigns")
@@ -40,9 +43,16 @@ public class CampaignController {
 		this.userServ = userv;
 	}
 	
-	
+	@PostMapping("/{id}/new-message")
+	public String addMessage(@PathVariable("id") int id, @RequestBody Campaign c, Message msg){
+		
+		return campServ.addMessage(c, msg);
+	}
 
-	
+	@GetMapping("/{id}/messages")
+	public List<Message> getAllMessages(int id){
+		return campServ.getMessagesFromCampaign(id);
+	}
 	/**
 	 * Get a list of current campaigns
 	 * @return
