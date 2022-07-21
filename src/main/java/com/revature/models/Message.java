@@ -22,7 +22,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(exclude="camp")
-@ToString(exclude= "camp")
+@ToString(exclude= {"owner", "camp"})
 public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
