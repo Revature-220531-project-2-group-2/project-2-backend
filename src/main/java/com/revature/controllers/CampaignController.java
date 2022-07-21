@@ -103,6 +103,8 @@ public class CampaignController {
 		User creator = userServ.getByUsername(campaignHolder.getUsernameOfCreator()).get();
 		
 		newCampaign.getUsers().add(creator);
+		creator.addCampaign(newCampaign);
+	
 		
 		return campServ.addCampaign(newCampaign);
 	}
