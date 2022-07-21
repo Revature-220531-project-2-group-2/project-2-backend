@@ -10,6 +10,9 @@ public class MessageService {
 
 	private MessagesRepository msgRepo;
 	
+	public MessageService(MessagesRepository msgRepo) {
+		this.msgRepo = msgRepo;
+	}
 	public Message save(Message msg) {
 		return msgRepo.save(msg);
 	

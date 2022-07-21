@@ -35,6 +35,13 @@ public class Message {
 	@JoinColumn(name="camp")
 	private Campaign camp;
 
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name="created_by")
+	private User owner;
+	
+	
+	private String username;
 	
 	@Column(name = "message")
 	private String msg;

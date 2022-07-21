@@ -48,23 +48,24 @@ public class CampaignController {
 	public CampaignController(CampaignService campServ, UserService userv, MessageService msgServ) {
 		this.campServ = campServ;
 		this.userServ = userv;
+		this.msgServ = msgServ;
 	}
 
 	@PostMapping("/{id}/new-message")
-	public String addMessage(@PathVariable("id") int id, @RequestBody MessageHolder msgHolder) {
-
-		Optional<Campaign> c = campServ.getCampaignById(id);
-		if (!c.isPresent())
-			return "No such campaign exists";
-
+	public Message addMessage(@PathVariable("id") int id, @RequestBody MessageHolder msgHolder) {
+ 
 		Message msg = new Message();
-		msg.setCamp(c.get());
+	    Campaign c = campServ.findById(id).get();
+		
+		msg.setCamp(c);
 		msg.setMsg(msgHolder.getMsg());
-		msg.setTimeStampAsString(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS")));
-
-		msgServ.save(msg);
-
-		return msg.getMsg();
+		User user = userServ.getByUsername(msgHolder.getUsername()).get();
+		msg.setOwner(user);
+		msg.setTimeStampAsString(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")));
+		msg.setUsername(user.getUsername());
+		
+		campServ.addMessage(c, msg);
+		return msgServ.save(msg);
 	}
 
 	@GetMapping("/{id}/messages")

@@ -46,7 +46,6 @@ import lombok.ToString;
 public class User {
 
 	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -56,6 +55,7 @@ public class User {
 	@NonNull
 	private String username;
 
+	
 	@Column(nullable = false)
 	@NonNull
 	private String pwd;
@@ -69,6 +69,10 @@ public class User {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy ="user")
 	private Set<CharSheet> characters;
 
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "owner")
+	private List<Message> messages;
+	
 	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "user_campaigns", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "campaign_id"))
