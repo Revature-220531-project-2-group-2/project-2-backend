@@ -16,7 +16,9 @@ public class CampaignHolder {
 
 	@JsonIgnore
 	private int creatorId;
+	
 	private String usernameOfCreator;  
+	
 	private String campaignName;
 	
 	@JsonIgnore
