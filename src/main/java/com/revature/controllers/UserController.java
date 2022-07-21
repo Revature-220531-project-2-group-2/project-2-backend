@@ -93,7 +93,8 @@ public class UserController {
 	@PutMapping
 	public User updateUser(@RequestBody UserHolder updatedUser) {
 		User u = userService.getByUsername(updatedUser.getUsername()).get();
-		if(u == null) return null;
+		//User u = userService.getById(updatedUser.getId()).get();
+		
 		return userService.updateUser(User.makeUserFromUserHolder(u, updatedUser));
 	}
 
@@ -142,6 +143,7 @@ public class UserController {
 		}
 	}
 
+	
 	/**
 	 * Deletes a user by their id
 	 * 

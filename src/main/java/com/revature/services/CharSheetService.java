@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,8 +25,12 @@ public class CharSheetService {
 	 */
 	
 	public Optional<CharSheet> findByCharName(String charName) {
-		// TODO Auto-generated method stub
-		return charRepo.findCharSheetByCharName(charName);
+		
+		return charRepo.findAll().stream().filter(c -> c.getCharName().equals(charName)).findAny();
+	}
+	
+	public List<CharSheet> getAll(){
+		return charRepo.findAll();
 	}
 
 	public CharSheet deleteCharSheet(CharSheet cs) {
