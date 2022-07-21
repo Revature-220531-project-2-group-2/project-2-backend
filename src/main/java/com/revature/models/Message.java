@@ -31,7 +31,7 @@ public class Message {
 	private int id;
 	
 	@ManyToOne
-//	@JsonIgnore
+	@JsonIgnore
 	@JoinColumn(name="camp")
 	private Campaign camp;
 

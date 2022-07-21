@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,11 +10,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.data.CharSheetRepository;
-import com.revature.models.Campaign;
+import com.revature.dto.CharSheetHolder;
 import com.revature.models.CharSheet;
 import com.revature.services.CharSheetService;
 
@@ -82,15 +84,37 @@ public class CharSheetController {
 	
 	
 	/**
-	 * Create and save a new Campaign
+	 * Create and save a new CharacterSheet
 	 * @param newCampaign
 	 * @return
 	 */
 	@PostMapping
-	public CharSheet  createNewCharSheet(CharSheet newCharSheet) {
-		return charServ.addCharSheet(newCharSheet);
+	public CharSheet  createNewCharSheet(@RequestBody CharSheetHolder charSheetInfo) {
+	
+		return charServ.addCharSheet(makeCharSheetFromHolder(charSheetInfo));
 	}
 	
+	
+	private final CharSheet makeCharSheetFromHolder(CharSheetHolder charSheetInfo) {
+		CharSheet charSheet;
 		
+		charSheet = (charSheetInfo == null ) ? new CharSheet() : charServ.getCharacterById(charSheetInfo.getId()).get() ;
+		
+		charSheet.setCharClass(charSheetInfo.getCharClass());
+		charSheet.setCharisma(charSheetInfo.getCharisma());
+		charSheet.setCharName(charSheetInfo.getCharName());
+		charSheet.setConstitution(charSheetInfo.getConstitution());
+		charSheet.setDexterity(charSheetInfo.getDexterity());
+		List<String> equipment = (charSheetInfo.getEquipment() == null) ? new LinkedList<String>() : charSheetInfo.getEquipment();
+		charSheet.setEquipment(equipment);
+		charSheet.setIntelligence(charSheetInfo.getIntelligence());
+		charSheet.setRace(charSheetInfo.getRace());
+		charSheet.setSpells(charSheetInfo.getSpells());
+		charSheet.setStrength(charSheetInfo.getStrength());
+		charSheet.setUser(charSheetInfo.getUser());
+		charSheet.setWisdom(charSheetInfo.getWisdom());
+		
+		return charSheet;
+	}
 	
 }

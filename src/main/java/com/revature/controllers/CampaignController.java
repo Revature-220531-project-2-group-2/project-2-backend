@@ -1,6 +1,9 @@
 package com.revature.controllers;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,48 +18,63 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.dto.CampaignHolder;
+import com.revature.dto.MessageHolder;
 import com.revature.models.Campaign;
 import com.revature.models.Message;
 import com.revature.models.User;
 import com.revature.services.CampaignService;
+import com.revature.services.MessageService;
 import com.revature.services.UserService;
 
 /**
- * CampaignController:
- *               can create a new campaign                      
- *               can get a list of all campaigns
- *               can get a specific campaign by id              "/{id} 
- *               can get a list of users attached to a campaign "/{id}/users"
- *               can add a user to a specific campaign          "/{id}/add-{username}"
- *               can remove a user from a specific campaign     "/{id}/remove-{username}"
- *               can add a message to the campaign              "/{id}/new-message
- *               can retrieve message list form the campaign    "/{id}/messages
+ * CampaignController: can create a new campaign can get a list of all campaigns
+ * can get a specific campaign by id "/{id} can get a list of users attached to
+ * a campaign "/{id}/users" can add a user to a specific campaign
+ * "/{id}/add-{username}" can remove a user from a specific campaign
+ * "/{id}/remove-{username}" can add a message to the campaign
+ * "/{id}/new-message can retrieve message list form the campaign
+ * "/{id}/messages
  */
 @RestController
-@CrossOrigin(origins="*", allowedHeaders="*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/campaigns")
 public class CampaignController {
 
 	private CampaignService campServ;
 	private UserService userServ;
-	
-	public CampaignController(CampaignService campServ, UserService userv) {
+	private MessageService msgServ;
+
+	public CampaignController(CampaignService campServ, UserService userv, MessageService msgServ) {
 		this.campServ = campServ;
 		this.userServ = userv;
 	}
-	
+
 	@PostMapping("/{id}/new-message")
-	public String addMessage(@PathVariable("id") int id, @RequestBody Message msg){
+	public String addMessage(@PathVariable("id") int id, @RequestBody MessageHolder msgHolder) {
+
 		Optional<Campaign> c = campServ.getCampaignById(id);
-		return (c.isPresent()) ? campServ.addMessage(c.get(), msg) : null;
+		if (!c.isPresent())
+			return "No such campaign exists";
+
+		Message msg = new Message();
+		msg.setCamp(c.get());
+		msg.setMsg(msgHolder.getMsg());
+		msg.setTimeStampAsString(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS")));
+
+		msgServ.save(msg);
+
+		return msg.getMsg();
 	}
 
 	@GetMapping("/{id}/messages")
-	public List<Message> getAllMessages(@PathVariable("id") int id){
-	   return  campServ.getMessagesFromCampaign(id);
+	public List<Message> getAllMessages(@PathVariable("id") int id) {
+		return campServ.getMessagesFromCampaign(id);
 	}
+
 	/**
 	 * Get a list of current campaigns
+	 * 
 	 * @return
 	 */
 	@GetMapping
@@ -66,79 +84,95 @@ public class CampaignController {
 		System.out.println(camps);
 		return campServ.getAllCampaigns();
 	}
-	
+
 	/**
 	 * Create and save a new Campaign
+	 * Adds the creator of the campaign to the user list within the campaign
 	 * @param newCampaign
 	 * @return
 	 */
-	@PostMapping(value="/new-campaign")
-	public Campaign  createNewCampaign(@RequestBody Campaign newCampaign) {
+	@PostMapping(value = "/new-campaign")
+	public Campaign createNewCampaign(@RequestBody CampaignHolder campaignHolder) {
+
+		Campaign newCampaign = new Campaign();
+		newCampaign.setCampaignName(campaignHolder.getCampaignName());
+		newCampaign.setMessages(new LinkedList<Message>());
+		newCampaign.setUsers(new HashSet<User>());
+		
+		User creator = userServ.getByUsername(campaignHolder.getUsernameOfCreator()).get();
+		
+		newCampaign.getUsers().add(creator);
 		
 		return campServ.addCampaign(newCampaign);
 	}
 
 	/**
 	 * Gets a campaign by its id
+	 * 
 	 * @param id
 	 * @return
 	 */
-	@GetMapping(value="/{id}")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Campaign> findCampaignById(@PathVariable("id") int id) {
 		Optional<Campaign> campaign = campServ.findById(id);
-		if(!campaign.isPresent()) {
+		if (!campaign.isPresent()) {
 			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
 		} else {
 			return ResponseEntity.ok(campaign.get());
 		}
 	}
+
 	/**
 	 * Return a list of users attached to associated with a given campaign
+	 * 
 	 * @param id
 	 * @return
 	 */
-	@GetMapping(value="/{id}/users")
-	public Set<User> getUsersInCampaign(@PathVariable("id") int id){
+	@GetMapping(value = "/{id}/users")
+	public Set<User> getUsersInCampaign(@PathVariable("id") int id) {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
-		if(campaign.isPresent()) {
+		if (campaign.isPresent()) {
 			return campaign.get().getUsers();
-		}else { //return empty set	
+		} else { // return empty set
 			return new HashSet<User>();
 		}
 	}
 
 	/**
 	 * Adds a user to a campaign
-	 * @param id The id of the campaign
+	 * 
+	 * @param id       The id of the campaign
 	 * @param username The username of the user to be added
-	 * @return 
+	 * @return
 	 */
-	@PostMapping(value="/{id}/add-{username}")
-	public ResponseEntity<Campaign> addUserToCampaign(@PathVariable("id") int id, @PathVariable("username") String username) {
+	@PostMapping(value = "/{id}/add-{username}")
+	public ResponseEntity<Campaign> addUserToCampaign(@PathVariable("id") int id,
+			@PathVariable("username") String username) {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		Optional<User> user = userServ.getByUsername(username);
-		if(!campaign.isPresent() || !user.isPresent()) {
+		if (!campaign.isPresent() || !user.isPresent()) {
 			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
-		}else {
+		} else {
 			campServ.addUserToCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());
 		}
 	}
-	
 
 	/**
 	 * Removes a user to a campaign
-	 * @param id The id of the campaign
+	 * 
+	 * @param id       The id of the campaign
 	 * @param username The username of the user to be added
-	 * @return 
+	 * @return
 	 */
-	@PostMapping(value="/{id}/remove-{username}")
-	public ResponseEntity<Campaign> removeUserFromCampaign(@PathVariable("id") int id, @PathVariable("username") String username) {
+	@PostMapping(value = "/{id}/remove-{username}")
+	public ResponseEntity<Campaign> removeUserFromCampaign(@PathVariable("id") int id,
+			@PathVariable("username") String username) {
 		Optional<Campaign> campaign = campServ.getCampaignById(id);
 		Optional<User> user = userServ.getByUsername(username);
-		if(!campaign.isPresent() || !user.isPresent()) {
+		if (!campaign.isPresent() || !user.isPresent()) {
 			return new ResponseEntity<Campaign>(HttpStatus.NO_CONTENT);
-		}else {
+		} else {
 			campServ.removeUserFromCampaign(user.get(), campaign.get());
 			return ResponseEntity.ok(campaign.get());
 		}

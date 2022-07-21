@@ -42,6 +42,9 @@ public class CharSheetService {
 		return charRepo.save(cs);
 	}
 	
+	public Optional<CharSheet> getCharacterById(int id){
+		return charRepo.findById(id);
+	}
 	public Set<CharSheet> getCharactersByUsername(String username){
 		return charRepo.findCharSheetsByUserUsername(username);
 	}
