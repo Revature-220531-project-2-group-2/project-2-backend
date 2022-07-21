@@ -33,11 +33,8 @@ public class CampaignService {
 		return campRepo.findAll();
 	}
 	
-//	public Set<Campaign> getCampaignsByUser(User u){
-//		return campRepo.findAll().stream().filter(c -> c.getUsers().contains(u))			
-//				.collect(Collectors.toSet());
-//				
-//	}
+
+
 
 	public Optional<Campaign> getCampaignById(int id) {
 		return campRepo.findById(id);
@@ -76,7 +73,6 @@ public class CampaignService {
 	public List<Campaign> getCampaignsByUser(User user){
 		return campRepo.findAll().stream()
 				.filter(c -> c.getUsers().contains(user)).collect(Collectors.toList());
-
 	}
 
 	/**

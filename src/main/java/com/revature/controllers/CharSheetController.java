@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,11 +10,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.data.CharSheetRepository;
-import com.revature.models.Campaign;
+import com.revature.dto.CharSheetHolder;
 import com.revature.models.CharSheet;
 import com.revature.services.CharSheetService;
 
@@ -32,11 +35,11 @@ import com.revature.services.CharSheetService;
 @RequestMapping("/characters")
 public class CharSheetController {
 
-	private CharSheetRepository charRepo;
+	
 	private CharSheetService charServ;
 	
-	public CharSheetController(CharSheetRepository charRepo) {
-		this.charRepo = charRepo;
+	public CharSheetController(CharSheetService charServ) {
+		this.charServ = charServ;
 	}
 	
 	/**
@@ -45,7 +48,7 @@ public class CharSheetController {
 	 */
 	@GetMapping
 	public List<CharSheet> getAllCharacters(){
-		return charRepo.findAll();
+		return charServ.getAll();
 	}
 	
 	/**
@@ -53,10 +56,11 @@ public class CharSheetController {
 	 * @param charName
 	 * @return
 	 */
-	@GetMapping (value="/char-name-{charname}")
-	public ResponseEntity<CharSheet> findCharSheeetByCharName(@PathVariable("charName") String charName){
+	@GetMapping (value="/char-name-{char-name}")
+	public ResponseEntity<CharSheet> findCharSheeetByCharName(@PathVariable("char-name") String charName){
 		
-		Optional<CharSheet> charSheet = charRepo.findCharSheetByCharName(charName);
+		Optional<CharSheet> charSheet = charServ.findByCharName(charName); 
+				//charRepo.findAll().stream().filter(c -> c.getCharName().equals(charName)).findAny();
 		if(!charSheet.isPresent()) {
 			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
 		} else {
@@ -71,7 +75,7 @@ public class CharSheetController {
 	 */
 	@GetMapping(value="/id-{id}")
 	public ResponseEntity<CharSheet> findCharSheetById(@PathVariable("campaignId") int id) {
-		Optional<CharSheet> charSheet = charRepo.findById(id);
+		Optional<CharSheet> charSheet = charServ.getCharacterById(id);
 		if(!charSheet.isPresent()) {
 			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
 		} else {
@@ -80,17 +84,49 @@ public class CharSheetController {
 	}
 	
 	
-	
+	@PutMapping(value="/update-{char-name}")
+	public ResponseEntity<CharSheet> updateCharacter(@PathVariable("char-name") String charName, @RequestBody CharSheetHolder csh){
+		Optional<CharSheet> charSheet = charServ.findByCharName(charName);
+		if(!charSheet.isPresent()) {
+			return new ResponseEntity<CharSheet>(HttpStatus.NO_CONTENT);
+		} else {
+			charServ.updateCharSheet(CharSheet.copyCharSheetInfoFromHolder(charSheet.get(), csh));
+			return ResponseEntity.ok(charSheet.get());
+		}
+		
+	}
 	/**
-	 * Create and save a new Campaign
+	 * Create and save a new CharacterSheet
 	 * @param newCampaign
 	 * @return
 	 */
 	@PostMapping
-	public CharSheet  createNewCharSheet(CharSheet newCharSheet) {
-		return charServ.addCharSheet(newCharSheet);
+	public CharSheet  createNewCharSheet(@RequestBody CharSheetHolder charSheetInfo) {
+	
+		return charServ.addCharSheet(makeCharSheetFromHolder(charSheetInfo));
 	}
 	
+	
+	private final CharSheet makeCharSheetFromHolder(CharSheetHolder charSheetInfo) {
+		CharSheet charSheet;
 		
+		charSheet = (charSheetInfo == null ) ? new CharSheet() : charServ.getCharacterById(charSheetInfo.getId()).get() ;
+		
+		charSheet.setCharClass(charSheetInfo.getCharClass());
+		charSheet.setCharisma(charSheetInfo.getCharisma());
+		charSheet.setCharName(charSheetInfo.getCharName());
+		charSheet.setConstitution(charSheetInfo.getConstitution());
+		charSheet.setDexterity(charSheetInfo.getDexterity());
+		List<String> equipment = (charSheetInfo.getEquipment() == null) ? new LinkedList<String>() : charSheetInfo.getEquipment();
+		charSheet.setEquipment(equipment);
+		charSheet.setIntelligence(charSheetInfo.getIntelligence());
+		charSheet.setRace(charSheetInfo.getRace());
+		charSheet.setSpells(charSheetInfo.getSpells());
+		charSheet.setStrength(charSheetInfo.getStrength());
+		charSheet.setUser(charSheetInfo.getUser());
+		charSheet.setWisdom(charSheetInfo.getWisdom());
+		
+		return charSheet;
+	}
 	
 }

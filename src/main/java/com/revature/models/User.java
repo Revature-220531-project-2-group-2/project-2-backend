@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.revature.dto.UserHolder;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +46,6 @@ import lombok.ToString;
 public class User {
 
 	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -53,6 +55,7 @@ public class User {
 	@NonNull
 	private String username;
 
+	
 	@Column(nullable = false)
 	@NonNull
 	private String pwd;
@@ -67,9 +70,31 @@ public class User {
 	private Set<CharSheet> characters;
 
 	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "owner")
+	private List<Message> messages;
+	
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "user_campaigns", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "campaign_id"))
 	private List<Campaign> campaigns;
+
+
+	public static  final User makeUserFromUserHolder(User user, UserHolder uhold) {
+	     
+			
+			//user = (uhold.getId() == 0 ) ? new User() : userService.getById(uhold.getId()) ;
+			List<Campaign> campaigns = (uhold.getCampaigns() == null) ? new LinkedList<Campaign>() : uhold.getCampaigns();
+	        user.setCampaigns(campaigns);
+	        Set<CharSheet> characters = (uhold.getCharacters() == null) ? new HashSet<CharSheet>() : uhold.getCharacters();
+	        user.setCharacters(characters);
+	        
+	        user.setEmail(uhold.getEmail());
+	        user.setPwd(uhold.getPwd());
+	        user.setUsername(uhold.getUsername());
+
+	        return user;
+			
+		}
 
 	public void removeCampaign(Campaign c) {
 		this.campaigns.remove(c);

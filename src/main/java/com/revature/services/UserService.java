@@ -49,8 +49,8 @@ public class UserService {
 	}
 	
 	public Optional<User> getByUsername(String username){
-		return userRepo.findUserByUsername(username);
 		
+		return userRepo.findAll().stream().filter(u -> u.getUsername().equals(username)).findFirst();		
 	}
 
 	//Get all Users from the db
@@ -73,10 +73,11 @@ public class UserService {
 	public CharSheet addCharSheet(User u, CharSheet newCharSheet) {
 		
 		newCharSheet.setUser(u);
-
+        u.addCharacter(newCharSheet);
 //		Set<CharSheet> mySheets = charRepo.findAllCharSheetsByUserId(u.getId());
 //		mySheets.add(newCharSheet);
 		charRepo.save(newCharSheet);
+		userRepo.save(u);
 //		userRepo.save(u);
 		return newCharSheet;
 	}

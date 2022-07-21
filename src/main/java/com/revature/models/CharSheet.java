@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,8 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.revature.dto.CharSheetHolder;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -83,14 +84,24 @@ public class CharSheet{
 	@CollectionTable(name="equipment", joinColumns= { @JoinColumn(name = "char_id" )})
 	private List<String> equipment;
 
-// DO YOU NEED THESE HERE???? USERS SHOULD BE REMOVED FROM THE USER CONTROLLER
-//	public void removeUser(User u) {
-//		user =null;
-//	}
-//
-//	public void addUser(User u) {
-//		// TODO Auto-generated method stub
-//		user = u;
-//	}
 	
+	public static final CharSheet copyCharSheetInfoFromHolder(CharSheet charSheet, CharSheetHolder charSheetInfo) {
+		
+		charSheet.setCharClass(charSheetInfo.getCharClass());
+		charSheet.setCharisma(charSheetInfo.getCharisma());
+		charSheet.setCharName(charSheetInfo.getCharName().replace(" ", "-"));
+		charSheet.setConstitution(charSheetInfo.getConstitution());
+		charSheet.setDexterity(charSheetInfo.getDexterity());
+		List<String> equipment = (charSheetInfo.getEquipment() == null) ? new LinkedList<String>() : charSheetInfo.getEquipment();
+		charSheet.setEquipment(equipment);
+		charSheet.setIntelligence(charSheetInfo.getIntelligence());
+		charSheet.setRace(charSheetInfo.getRace());
+		Set<String> spells = (charSheetInfo.getSpells() == null) ? new HashSet<String>() : charSheetInfo.getSpells();
+		charSheet.setSpells(charSheetInfo.getSpells());
+		charSheet.setStrength(charSheetInfo.getStrength());
+		charSheet.setUser(charSheetInfo.getUser());
+		charSheet.setWisdom(charSheetInfo.getWisdom());
+		
+		return charSheet;
+	}
 }

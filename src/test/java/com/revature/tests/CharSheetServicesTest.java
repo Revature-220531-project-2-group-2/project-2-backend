@@ -44,22 +44,22 @@ public class CharSheetServicesTest {
 		dummyCharacter = null;
 	}
 	//==================FIND BY CHAR NAME ===========================
-	@Test
-	public void testFindByCharNameValid() {
-	   when(mockCharRepo.findCharSheetByCharName("dave")).thenReturn(Optional.of(dummyCharacter));
-	   
-	   Optional<CharSheet> actualChar = charServ.findByCharName("dave") ;
-	   CharSheet expectedChar = dummyCharacter;
-	   
-	   assertEquals(expectedChar, actualChar.get());
-	}
+//	@Test
+//	public void testFindByCharNameValid() {
+//	   when(mockCharRepo.findCharSheetByCharName("dave")).thenReturn(Optional.of(dummyCharacter));
+//	   
+//	   Optional<CharSheet> actualChar = charServ.findByCharName("dave") ;
+//	   CharSheet expectedChar = dummyCharacter;
+//	   
+//	   assertEquals(expectedChar, actualChar.get());
+//	}
 	
-	@Test
-	public void testFindByCharNameInvalidName(){
-	  when(mockCharRepo.findCharSheetByCharName("davis")).thenReturn(null);
-	  
-	  assertNull(charServ.findByCharName("davis"));
-	}
+//	@Test
+//	public void testFindByCharNameInvalidName(){
+//	  when(mockCharRepo.findCharSheetByCharName("davis")).thenReturn(null);
+//	  
+//	  assertNull(charServ.findByCharName("davis"));
+//	}
 	//===================TEST UpdateCharSheet
 	 @Test
 	 public void testUpdateCharSheet() {
